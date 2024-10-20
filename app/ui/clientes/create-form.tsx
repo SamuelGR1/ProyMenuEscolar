@@ -19,84 +19,80 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-               {/* Invoice Amount */}
-               <div className="mb-4">
-          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Ingrese Nombre
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="amount"
-                name="amount"
-                type="number"
-                step="0.01"
-                placeholder="Nombre"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                required
-              />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-            </div>
-          </div>
-        </div>
+      {/* Customer Name */}
+<div className="mb-4">
+  <label htmlFor="name" className="mb-2 block text-sm font-medium">
+    Ingrese Nombre
+  </label>
+  <div className="relative mt-2 rounded-md">
+    <div className="relative">
+      <input
+        id="name"
+        name="name"
+        type="text"
+        placeholder="Nombre"
+        className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+        required
+      />
+      <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+    </div>
+  </div>
+</div>
 
         {/* Invoice Amount */}
         <div className="mb-4">
-          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Ingrese Telefono
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="amount"
-                name="amount"
-                type="number"
-                step="0.01"
-                placeholder="Ingrese Numero"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                required
-              />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+  <label htmlFor="phone" className="mb-2 block text-sm font-medium">
+    Ingrese Teléfono
+  </label>
+  <div className="relative mt-2 rounded-md">
+    <div className="relative">
+      <input
+        id="phone"
+        name="phone"
+        type="tel"
+        placeholder="Ingrese Número de Teléfono"
+        className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+        required
+      />
+            
             </div>
           </div>
         </div>
          {/* Invoice Amount */}
-        <div className="mb-4">
-          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Ingrese Direccion
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="amount"
-                name="amount"
-                type="number"
-                step="0.01"
-                placeholder="Ingrese Direccion"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                required
-              />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+         <div className="mb-4">
+  <label htmlFor="address" className="mb-2 block text-sm font-medium">
+    Ingrese Dirección
+  </label>
+  <div className="relative mt-2 rounded-md">
+    <div className="relative">
+      <input
+        id="address"
+        name="address"
+        type="text"
+        placeholder="Ingrese Dirección"
+        className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+        required
+      />
+             
             </div>
           </div>
         </div>
         {/* Invoice Amount */}
         <div className="mb-4">
-          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Ingrese Fecha de Registro
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="amount"
-                name="amount"
-                type="number"
-                step="0.01"
-                placeholder="Fecha"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                required
-              />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+  <label htmlFor="registrationDate" className="mb-2 block text-sm font-medium">
+    Ingrese Fecha de Registro
+  </label>
+  <div className="relative mt-2 rounded-md">
+    <div className="relative">
+      <input
+        id="registrationDate"
+        name="registrationDate"
+        type="date"
+        placeholder="Fecha"
+        className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+        required
+      />
+              
             </div>
           </div>
         </div>
