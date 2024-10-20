@@ -1,45 +1,102 @@
 'use client';
 
-import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
+import { CustomerField } from '@/app/lib/definitions';
+import Link from 'next/link';
 import {
   CheckIcon,
   ClockIcon,
   CurrencyDollarIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
-import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { updateInvoice, State } from '@/app/lib/actions';
+import { createInvoice, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 
-export default function EditInvoiceForm({
-  invoice,
-  customers,
-}: {
-  invoice: InvoiceForm;
-  customers: CustomerField[];
-}) {
+export default function Form({ customers }: { customers: CustomerField[] }) {
   const initialState: State = { message: null, errors: {} };
-  const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
-  const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
+  const [state, formAction] = useActionState(createInvoice, initialState);
 
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {/* Customer Name */}
+
+        {/* name product */}
+      <div className="mb-4">
+          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+            Nombre del Prodcuto
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="amount"
+                name="amount"
+                type="string"
+                step="0.01"
+                placeholder="nombre"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        
+        {/* precio product */}
+      <div className="mb-4">
+          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+            Precio costo
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="amount"
+                name="amount"
+                type="number"
+                step="0.01"
+                placeholder="ingrese costo"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+         {/* precio product */}
+      <div className="mb-4">
+          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+            Precio Unitario
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="amount"
+                name="amount"
+                type="number"
+                step="0.01"
+                placeholder="ingrese precio unitario de venta"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
+                
+              />
+              
+            </div>
+          </div>
+        </div>
+
+        {/* Categoría */}
         <div className="mb-4">
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Choose customer
+            Categoría
           </label>
           <div className="relative">
             <select
               id="customer"
               name="customerId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue={invoice.customer_id}
+              defaultValue=""
             >
               <option value="" disabled>
-                Select a customer
+                Selecciona Categoría
               </option>
               {customers.map((customer) => (
                 <option key={customer.id} value={customer.id}>
@@ -49,15 +106,35 @@ export default function EditInvoiceForm({
             </select>
             <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
-          {/* Mostrar error del cliente */}
-          {state.errors?.customerId && (
-            <p className="mt-1 text-sm text-red-600">
-              {state.errors.customerId[0]}
-            </p>
-          )}
         </div>
 
-        {/* Invoice Amount */}
+        
+        {/*  subcategoria */}
+        <div className="mb-4">
+          <label htmlFor="customer" className="mb-2 block text-sm font-medium">
+            Sub-Categoría
+          </label>
+          <div className="relative">
+            <select
+              id="customer"
+              name="customerId"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Selecciona Sub-Categoría
+              </option>
+              {customers.map((customer) => (
+                <option key={customer.id} value={customer.id}>
+                  {customer.name}
+                </option>
+              ))}
+            </select>
+            <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          </div>
+        </div>
+
+        {/* Invoice Amount
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">
             Choose an amount
@@ -69,49 +146,14 @@ export default function EditInvoiceForm({
                 name="amount"
                 type="number"
                 step="0.01"
-                defaultValue={invoice.amount}
                 placeholder="Enter USD amount"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
               />
               <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
-          {/* Mostrar error del monto */}
-          {state.errors?.amount && (
-            <p className="mt-1 text-sm text-red-600">
-              {state.errors.amount[0]}
-            </p>
-          )}
-        </div>
-
-
- {/* Invoice Amount */}
-        <div className="mb-4">
-          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Choose an amount
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="amount"
-                name="amount"
-                type="number"
-                step="0.01"
-                defaultValue={invoice.amount}
-                placeholder="Enter USD amount"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-            </div>
-          </div>
-          {/* Mostrar error del monto */}
-          {state.errors?.amount && (
-            <p className="mt-1 text-sm text-red-600">
-              {state.errors.amount[0]}
-            </p>
-          )}
-        </div>
-
+        </div> */}
 
         {/* Invoice Status */}
         <fieldset>
@@ -126,8 +168,8 @@ export default function EditInvoiceForm({
                   name="status"
                   type="radio"
                   value="pending"
-                  defaultChecked={invoice.status === 'pending'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                  required
                 />
                 <label
                   htmlFor="pending"
@@ -142,8 +184,8 @@ export default function EditInvoiceForm({
                   name="status"
                   type="radio"
                   value="paid"
-                  defaultChecked={invoice.status === 'paid'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                  required
                 />
                 <label
                   htmlFor="paid"
@@ -154,12 +196,6 @@ export default function EditInvoiceForm({
               </div>
             </div>
           </div>
-          {/* Mostrar error de estado */}
-          {state.errors?.status && (
-            <p className="mt-1 text-sm text-red-600">
-              {state.errors.status[0]}
-            </p>
-          )}
         </fieldset>
       </div>
       <div className="mt-6 flex justify-end gap-4">
@@ -169,12 +205,8 @@ export default function EditInvoiceForm({
         >
           Cancel
         </Link>
-        <Button type="submit">Edit Invoice</Button>
+        <Button type="submit">Create Invoice</Button>
       </div>
-      {/* Mostrar mensaje general si existe */}
-      {state.message && (
-        <p className="mt-4 text-sm text-red-600">{state.message}</p>
-      )}
     </form>
   );
 }

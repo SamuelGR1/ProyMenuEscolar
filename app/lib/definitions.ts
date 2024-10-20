@@ -2,6 +2,33 @@
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
 // However, these types are generated automatically if you're using an ORM such as Prisma.
+
+export type productos = {
+  descripcion_producto: string;
+  precio_costo: number;
+  precio_unitario: number;
+  categoria_id: string;
+  subcategoria_id: string;
+  fecha_modificacion: string;
+};
+
+export type categorias = {
+  id_categoria: string;
+  descripcion_categoria: string;
+  
+}
+export type subcategorias = {
+  id_subcategoria: string;
+  descripcion_subcategoria: string;
+  categoria_id: string
+
+};
+
+
+
+
+
+
 export type User = {
   id: string;
   name: string;

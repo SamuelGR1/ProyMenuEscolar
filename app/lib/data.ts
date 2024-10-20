@@ -9,6 +9,8 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils'; 
 
+
+
 export async function fetchRevenue() {
   try {
     // Artificially delay a response for demo purposes.
@@ -217,3 +219,36 @@ export async function fetchFilteredCustomers(query: string) {
     throw new Error('Failed to fetch customer table.');
   }
 }
+
+
+export async function fetchFilteredProducto(query: string) {
+  try {
+    const data = await sql<CustomersTableType>`
+		
+		 SELECT 
+  p.id_producto AS id,
+  p.descripcion_producto AS producto,
+  p.precio_costo AS costo,
+  p.precio_unitario AS precio_unitario,
+  c.descripcion_categoria AS categoria,
+  s.descripcion_subcategoria AS subcategoria,
+  p.fecha_modificacion
+FROM productos p
+JOIN categorias c ON p.categoria_id = c.id_categoria
+JOIN subcategorias s ON p.subcategoria_id = s.id_subcategoria
+ORDER BY p.fecha_modificacion DESC;
+	  `;
+
+    const productos = data.rows.map((productos) => ({
+      ...productos,
+      total_pending: formatCurrency(productos.total_pending),
+      total_paid: formatCurrency(productos.total_paid),
+    }));
+
+    return productos;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch customer table.');
+  }
+}
+
