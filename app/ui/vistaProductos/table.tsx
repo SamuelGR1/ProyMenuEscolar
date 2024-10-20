@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { UpdateInvoice, DeleteInvoice } from '@/app/ui/invoices/buttons';
 import InvoiceStatus from '@/app/ui/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
-import { fetchFilteredInvoices } from '@/app/lib/data';
+import { fetchFilteredproductos } from '@/app/lib/data';
 
 export default async function productotable({
   query,
@@ -11,18 +11,18 @@ export default async function productotable({
   query: string;
   currentPage: number;
 }) {
-  const invoices = await fetchFilteredInvoices(query, currentPage);
+  const Productos = await fetchFilteredproductos(query, currentPage);
 
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-          <div className="md:hidden">
-            {invoices?.map((invoice) => (
+          {/* <div className="md:hidden">
+            {Productos?.map((producto) => (
               <div
-                key={invoice.id}
-                className="mb-2 w-full rounded-md bg-white p-4"
-              >
+                key={producto.id_producto}
+                className="mb-2 w-full rounded-md bg-white p-4">
+
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
                     <div className="mb-2 flex items-center">
@@ -53,7 +53,7 @@ export default async function productotable({
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
           <table className="hidden min-w-full text-gray-900 md:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
@@ -82,41 +82,53 @@ export default async function productotable({
               </tr>
             </thead>
             <tbody className="bg-white">
-              {invoices?.map((invoice) => (
+              {Productos?.map((producto) => (
                 <tr
-                  key={invoice.id}
+                  key={producto.id_producto}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
-                      <Image
-                        src={invoice.image_url}
-                        className="rounded-full"
-                        width={28}
-                        height={28}
-                        alt={`${invoice.name}'s profile picture`}
-                      />
-                      <p>{invoice.name}</p>
+                      <p>{producto.descripcion_producto}</p>
                     </div>
                   </td>
+      
                   <td className="whitespace-nowrap px-3 py-3">
-                    {invoice.email}
+                    {formatCurrency(producto.precio_costo)}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatCurrency(invoice.amount)}
+                    {formatCurrency(producto.precio_unitario)}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {formatDateToLocal(invoice.date)}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    <InvoiceStatus status={invoice.status} />
-                  </td>
+                  
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                    <div className="flex items-center gap-3">
+                      <p>{producto.descripcion_categoria}</p>
+                    </div>
+                  </td>
+
+
+                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                    <div className="flex items-center gap-3">
+                      <p>{producto.descripcion_subcategoria}</p>
+                    </div>
+                  </td>
+
+                        
+                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                    <div className="flex items-center gap-3">
+                      <p>{formatDateToLocal(producto.fecha_modificacion)}</p>
+                    </div>
+                  </td>
+
+
+      
+
+                  {/* <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
                       <UpdateInvoice id={invoice.id} />
                       <DeleteInvoice id={invoice.id} />
                     </div>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

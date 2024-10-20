@@ -1,5 +1,6 @@
 import { sql } from '@vercel/postgres';
 import {
+  productos,
   CustomerField,
   CustomersTableType,
   InvoiceForm,
@@ -85,7 +86,7 @@ export async function fetchCardData() {
   }
 }
 
-const ITEMS_PER_PAGE = 6;
+
 export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
@@ -221,34 +222,37 @@ export async function fetchFilteredCustomers(query: string) {
 }
 
 
-export async function fetchFilteredProducto(query: string) {
+const ITEMS_PER_PAGE = 5;
+export async function fetchFilteredproductos(
+  query: string,
+  currentPage: number,
+) {
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
   try {
-    const data = await sql<CustomersTableType>`
-		
-		 SELECT 
-  p.id_producto AS id,
-  p.descripcion_producto AS producto,
-  p.precio_costo AS costo,
-  p.precio_unitario AS precio_unitario,
-  c.descripcion_categoria AS categoria,
-  s.descripcion_subcategoria AS subcategoria,
-  p.fecha_modificacion
-FROM productos p
-JOIN categorias c ON p.categoria_id = c.id_categoria
-JOIN subcategorias s ON p.subcategoria_id = s.id_subcategoria
-ORDER BY p.fecha_modificacion DESC;
-	  `;
+    const product = await sql<productos>
+    ` SELECT
+        productos.descripcion_producto,
+        productos.precio_costo,
+        productos.precio_unitario,
+        categorias.descripcion_categoria,
+        subcategorias.descripcion_subcategoria,
+        productos.fecha_modificacion
+      FROM productos
+      JOIN categorias ON productos.categoria_id = categorias.id_categoria
+      JOIN subcategorias ON productos.subcategoria_id = subcategorias.id_subcategoria
+      WHERE
 
-    const productos = data.rows.map((productos) => ({
-      ...productos,
-      total_pending: formatCurrency(productos.total_pending),
-      total_paid: formatCurrency(productos.total_paid),
-    }));
+        productos.descripcion_producto ILIKE ${`%${query}%`} 
 
-    return productos;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch customer table.');
+      ORDER BY productos.descripcion_producto DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+
+    return product.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch products.');
   }
 }
 

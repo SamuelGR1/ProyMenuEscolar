@@ -4,11 +4,12 @@
 // However, these types are generated automatically if you're using an ORM such as Prisma.
 
 export type productos = {
+  id_producto: string;
   descripcion_producto: string;
   precio_costo: number;
   precio_unitario: number;
-  categoria_id: string;
-  subcategoria_id: string;
+  descripcion_categoria: string;
+  descripcion_subcategoria: string;
   fecha_modificacion: string;
 };
 
