@@ -238,14 +238,20 @@ export async function fetchFilteredproductos(
         categorias.descripcion_categoria,
         subcategorias.descripcion_subcategoria,
         productos.fecha_modificacion
+
       FROM productos
+
       JOIN categorias ON productos.categoria_id = categorias.id_categoria
       JOIN subcategorias ON productos.subcategoria_id = subcategorias.id_subcategoria
+
       WHERE
 
-        productos.descripcion_producto ILIKE ${`%${query}%`} 
-
-      ORDER BY productos.descripcion_producto DESC
+          productos.descripcion_producto ILIKE ${`%${query}%`} OR
+          categorias.descripcion_categoria ILIKE ${`%${query}%`} OR
+          subcategorias.descripcion_subcategoria ILIKE ${`%${query}%`} OR
+          TO_CHAR(productos.fecha_modificacion, 'Mon DD, YYYY') ILIKE ${'%' + query + '%'}
+ 
+      ORDER BY productos.fecha_modificacion ASC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 

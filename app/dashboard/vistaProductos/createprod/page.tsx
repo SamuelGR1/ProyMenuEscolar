@@ -12,7 +12,7 @@ export default async function Page() {
           { label: 'Producto', href: '/dashboard/vistaProductos' },
           {
             label: 'Registra Producto',
-            href: '/dashboard/vistaProductos/create',
+            href: '/dashboard/vistaProductos/createprod',
             active: true,
           },
         ]}

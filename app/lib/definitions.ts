@@ -25,6 +25,23 @@ export type subcategorias = {
 
 };
 
+export type productosField = {
+  id_producto: string;
+  descripcion_producto: string;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
