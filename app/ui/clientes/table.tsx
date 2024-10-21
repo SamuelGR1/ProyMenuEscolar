@@ -2,22 +2,22 @@ import Image from 'next/image';
 import { UpdateInvoice, DeleteInvoice } from '@/app/ui/clientes/buttons';
 import InvoiceStatus from '@/app/ui/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
-import { fetchFilteredInvoices } from '@/app/lib/data';
+import { fetchFilteredClientes} from '@/app/lib/data';
 
-export default async function InvoicesTable({
+export default async function clientesTable({
   query,
   currentPage,
 }: {
   query: string;
   currentPage: number;
 }) {
-  const invoices = await fetchFilteredInvoices(query, currentPage);
+  const clientes = await fetchFilteredClientes(query, currentPage);
 
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-          <div className="md:hidden">
+          {/* <div className="md:hidden">
             {invoices?.map((invoice) => (
               <div
                 key={invoice.id}
@@ -53,7 +53,7 @@ export default async function InvoicesTable({
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
           <table className="hidden min-w-full text-gray-900 md:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
@@ -76,39 +76,31 @@ export default async function InvoicesTable({
               </tr>
             </thead>
             <tbody className="bg-white">
-              {invoices?.map((invoice) => (
+              {clientes?.map((cliente) => (
                 <tr
-                  key={invoice.id}
+                  key={cliente.id_cliente}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
-                      <Image
-                        src={invoice.image_url}
-                        className="rounded-full"
-                        width={28}
-                        height={28}
-                        alt={`${invoice.name}'s profile picture`}
-                      />
-                      <p>{invoice.name}</p>
+                  
+                      <p>{cliente.nombre_cliente}</p>
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {invoice.email}
+                    {cliente.telefono_cliente}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatCurrency(invoice.amount)}
+                    {cliente.direccion_cliente}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatDateToLocal(invoice.date)}
+                    {formatDateToLocal(cliente.fecha_registro)}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    <InvoiceStatus status={invoice.status} />
-                  </td>
+                  
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateInvoice id={invoice.id} />
-                      <DeleteInvoice id={invoice.id} />
+                      <UpdateInvoice id={cliente.id_cliente} />
+                      <DeleteInvoice id={cliente.id_cliente} />
                     </div>
                   </td>
                 </tr>

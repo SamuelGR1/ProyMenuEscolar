@@ -84,3 +84,14 @@ export type InvoiceForm = {
   amount: number;
   status: 'pending' | 'paid';
 };
+
+
+export type clientes ={
+  id_cliente: string;
+  nombre_cliente: string;
+  telefono_cliente: string;
+  direccion_cliente: string;
+  fecha_registro: string;
+
+
+};

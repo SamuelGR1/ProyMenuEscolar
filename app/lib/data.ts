@@ -1,5 +1,6 @@
 import { sql } from '@vercel/postgres';
 import {
+  clientes,
   CustomerField,
   CustomersTableType,
   InvoiceForm,
@@ -83,7 +84,7 @@ export async function fetchCardData() {
   }
 }
 
-const ITEMS_PER_PAGE = 6;
+
 export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
@@ -216,4 +217,41 @@ export async function fetchFilteredCustomers(query: string) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch customer table.');
   }
+
 }
+
+
+const ITEMS_PER_PAGE = 6;
+export async function fetchFilteredClientes(
+  query: string,
+  currentPage: number,
+) {
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const client = await sql<clientes>`
+  SELECT
+    clientes.nombre_cliente,
+    clientes.telefono_cliente,
+    clientes.direccion_cliente,
+    clientes.fecha_registro
+  FROM clientes
+  WHERE
+    clientes.nombre_cliente ILIKE ${'%' + query + '%'}
+    OR clientes.direccion_cliente ILIKE ${'%' + query + '%'}
+    OR clientes.telefono_cliente ILIKE ${'%' + query + '%'}
+    OR TO_CHAR(clientes.fecha_registro, 'Mon DD, YYYY') ILIKE ${'%' + query + '%'} 
+ ORDER BY clientes.fecha_registro DESC
+  LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+`;
+
+
+
+    return client.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch clientes.');
+  }
+}
+
+
