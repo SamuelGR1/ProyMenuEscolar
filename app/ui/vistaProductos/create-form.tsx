@@ -12,7 +12,7 @@ import { Button } from '@/app/ui/button';
 import { createInvoice, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 
-export default function Form({ customers }: { customers: CustomerField[] }) {
+export default function Formprod({ customers }: { customers: CustomerField[] }) {
   const initialState: State = { message: null, errors: {} };
   const [state, formAction] = useActionState(createInvoice, initialState);
 
@@ -134,6 +134,8 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
           </div>
         </div>
 
+
+
         {/* Invoice Amount
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">
@@ -156,7 +158,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         </div> */}
 
         {/* Invoice Status */}
-        <fieldset>
+        {/* <fieldset>
           <legend className="mb-2 block text-sm font-medium">
             Set the invoice status
           </legend>
@@ -196,7 +198,9 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
               </div>
             </div>
           </div>
-        </fieldset>
+        </fieldset> */}
+
+
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link

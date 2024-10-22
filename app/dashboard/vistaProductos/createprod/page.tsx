@@ -1,4 +1,4 @@
-import Form from '@/app/ui/vistaProductos/create-form';
+import Formprod from '@/app/ui/vistaProductos/create-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { fetchCustomers } from '@/app/lib/data';
  
@@ -17,7 +17,7 @@ export default async function Page() {
           },
         ]}
       />
-      <Form customers={customers} />
+      <Formprod customers={customers} />
     </main>
   );
 }

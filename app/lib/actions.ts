@@ -8,7 +8,7 @@ import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
  
 
-const FormSchema = z.object({
+const FormSchema1 = z.object({
   id: z.string(),
   customerId: z.string({
     invalid_type_error: 'Please select a customer.',
@@ -23,8 +23,8 @@ const FormSchema = z.object({
   date: z.string(),
 });
 
-  const CreateInvoice = FormSchema.omit({ id: true, date: true });
-  const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+  const CreateInvoice = FormSchema1.omit({ id: true, date: true });
+  const UpdateInvoice = FormSchema1.omit({ id: true, date: true });
 
   export type State = {
     errors?: {
@@ -144,3 +144,88 @@ export async function authenticate(
   }
 }
   
+
+
+// Esquema de validación con Zod
+const FormSchema = z.object({
+  descripcion_producto: z.string().min(1, {
+    message: 'La descripción del producto es obligatoria.',
+  }),
+  precio_costo: z
+    .preprocess((val) => Number(val), z.number().positive({ message: 'El precio debe ser mayor que 0.' })),
+  precio_unitario: z
+    .preprocess((val) => Number(val), z.number().positive({ message: 'El precio unitario debe ser mayor que 0.' })),
+  categoria_id: z.string().min(1, { message: 'La categoría es obligatoria.' }),
+  subcategoria_id: z.string().min(1, { message: 'La subcategoría es obligatoria.' }),
+});
+
+// Función para obtener el ID de categoría según su descripción
+async function getCategoriaIdByDescripcion(descripcion: string): Promise<number | null> {
+  const result = await sql`
+    SELECT id_categoria FROM categorias WHERE descripcion_categoria = ${descripcion} LIMIT 1;
+  `;
+  return result.rowCount > 0 ? result.rows[0].id_categoria : null;
+}
+
+// Función para obtener el ID de subcategoría según su descripción
+async function getSubcategoriaIdByDescripcion(descripcion: string): Promise<number | null> {
+  const result = await sql`
+    SELECT id_subcategoria FROM subcategorias WHERE descripcion_subcategoria = ${descripcion} LIMIT 1;
+  `;
+  return result.rowCount > 0 ? result.rows[0].id_subcategoria : null;
+}
+
+
+
+
+
+// Función para crear un producto
+export async function createProduct(formData: FormData) {
+  // Validar los datos usando Zod
+  const validatedFields = FormSchema.safeParse({
+    descripcion_producto: formData.get('descripcion_producto'),
+    precio_costo: formData.get('precio_costo'),
+    precio_unitario: formData.get('precio_unitario'),
+    categoria_id: formData.get('categoria_id'), // Cambiado a ID
+    subcategoria_id: formData.get('subcategoria_id'), // Cambiado a ID
+  });
+
+  // Si la validación falla, devolver los errores
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Faltan campos obligatorios o son inválidos.',
+    };
+  }
+
+  const {
+    descripcion_producto,
+    precio_costo,
+    precio_unitario,
+    categoria_id,
+    subcategoria_id,
+  } = validatedFields.data;
+
+  // Obtener los IDs de categoría y subcategoría
+  const categoriaId = await getCategoriaIdByDescripcion(categoria_id);
+  const subcategoriaId = await getSubcategoriaIdByDescripcion(subcategoria_id);
+
+  if (!categoriaId || !subcategoriaId) {
+    return { message: 'Categoría o subcategoría no encontrada.' };
+  }
+
+  try {
+    // Insertar el nuevo producto en la base de datos
+    await sql`
+      INSERT INTO productos (descripcion_producto, precio_costo, precio_unitario, categoria_id, subcategoria_id)
+      VALUES (${descripcion_producto}, ${precio_costo}, ${precio_unitario}, ${categoriaId}, ${subcategoriaId});
+    `;
+
+    revalidatePath('/dashboard/vistaProductos'); // Revalidar la caché
+    redirect('/dashboard/vistaProductos'); // Redirigir al usuario
+    return { message: 'Producto creado con éxito.' };
+  } catch (error) {
+    console.error('Error al insertar producto:', error);
+    return { message: 'Error en la base de datos: No se pudo crear el producto.' };
+  }
+}
