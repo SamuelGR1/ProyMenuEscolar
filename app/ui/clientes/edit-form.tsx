@@ -1,6 +1,6 @@
 'use client';
 
-import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
+import { clientes } from '@/app/lib/definitions';
 import {
   CheckIcon,
   ClockIcon,
@@ -9,19 +9,20 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { updateInvoice, State } from '@/app/lib/actions';
+import { UpdateClientes, Stat } from '@/app/lib/actions';
 import { useActionState } from 'react';
 
-export default function EditInvoiceForm({
-  invoice,
-  customers,
+
+export default function EditClienteForm({
+  cliente,
+  
 }: {
-  invoice: InvoiceForm;
-  customers: CustomerField[];
+  cliente: clientes;
+  
 }) {
-  const initialState: State = { message: null, errors: {} };
-  const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
-  const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
+  const initialState: Stat = { message: null, errors: {} };
+  const updateInvoiceWithId = UpdateClientes.bind(null, cliente.id_cliente);
+  const [Stat, formAction] = useActionState(updateInvoiceWithId, initialState);
 
   return (
     <form action={formAction}>
@@ -35,11 +36,11 @@ export default function EditInvoiceForm({
   <div className="relative">
     <input
       id="customer"
-      name="customerName"
+      name="nombre_cliente"
       type="text"
       placeholder="Ingrese Nombre del Cliente"
       className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-      defaultValue={invoice.customer_id} // Asumiendo que `invoice.customer_name` es el nombre del cliente
+      defaultValue={cliente.id_cliente} // Asumiendo que `invoice.customer_name` es el nombre del cliente
       required
     />
     <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -47,9 +48,9 @@ export default function EditInvoiceForm({
 
 
           {/* Mostrar error del cliente */}
-          {state.errors?.customerId && (
+          {Stat.errors?.nombre_cliente && (
             <p className="mt-1 text-sm text-red-600">
-              {state.errors.customerId[0]}
+              {Stat.errors.nombre_cliente[0]}
             </p>
           )}
         </div>
@@ -63,7 +64,7 @@ export default function EditInvoiceForm({
     <div className="relative">
       <input
         id="phone"
-        name="phone"
+        name="telefono_cliente"
         type="tel"
         placeholder="Ingrese Número de Teléfono"
         className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -73,10 +74,10 @@ export default function EditInvoiceForm({
             
             </div>
           </div>
-          {/* Mostrar error del monto */}
-          {state.errors?.amount && (
+          {/* Mostrar error del telefono */}
+          {Stat.errors?.telefono_cliente && (
             <p className="mt-1 text-sm text-red-600">
-              {state.errors.amount[0]}
+              {Stat.errors.telefono_cliente[0]}
             </p>
           )}
         </div>
@@ -91,7 +92,7 @@ export default function EditInvoiceForm({
     <div className="relative">
       <input
         id="address"
-        name="address"
+        name="direccion_cliente"
         type="text"
         placeholder="Ingrese Dirección"
         className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -101,10 +102,10 @@ export default function EditInvoiceForm({
               
             </div>
           </div>
-          {/* Mostrar error del monto */}
-          {state.errors?.amount && (
+          {/* Mostrar error del direccion */}
+          {Stat.errors?.direccion_cliente && (
             <p className="mt-1 text-sm text-red-600">
-              {state.errors.amount[0]}
+              {Stat.errors.direccion_cliente[0]}
             </p>
           )}
         </div>
@@ -119,7 +120,7 @@ export default function EditInvoiceForm({
     <div className="relative">
       <input
         id="registrationDate"
-        name="registrationDate"
+        name="fecha_registro"
         type="date"
         placeholder="Fecha"
         className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -141,8 +142,8 @@ export default function EditInvoiceForm({
         <Button type="submit">Editar</Button>
       </div>
       {/* Mostrar mensaje general si existe */}
-      {state.message && (
-        <p className="mt-4 text-sm text-red-600">{state.message}</p>
+      {Stat.message && (
+        <p className="mt-4 text-sm text-red-600">{Stat.message}</p>
       )}
     </form>
   );

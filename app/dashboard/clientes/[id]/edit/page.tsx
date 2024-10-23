@@ -1,18 +1,22 @@
 import Form from '@/app/ui/clientes/edit-form';
 import Breadcrumbs from '@/app/ui/clientes/breadcrumbs';
-import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
+import { fetchClienteById} from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
     
-    const [invoice, customers] = await Promise.all([
-        fetchInvoiceById(id),
-        fetchCustomers(),
+    const [cliente] = await Promise.all([
+        fetchClienteById(id),
+        
       ]);
 
-      if (!invoice) {
+
+      
+
+      if (!cliente) {
         notFound();
+        
       }
       
   return (
@@ -27,7 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           },
         ]}
       />
-      <Form invoice={invoice} customers={customers} />
+      <Form cliente={cliente} />
     </main>
   );
 }

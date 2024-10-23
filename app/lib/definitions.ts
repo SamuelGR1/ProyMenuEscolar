@@ -95,3 +95,14 @@ export type clientes ={
 
 
 };
+
+
+
+export type InvoiceFormclientes = {
+  id_cliente: string;
+  nombre_cliente: string;
+  telefono_cliente: string;
+  direccion_cliente: string;
+  fecha_registro: string;
+};
+

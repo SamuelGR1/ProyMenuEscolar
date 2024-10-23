@@ -1,12 +1,13 @@
 import Pagination from '@/app/ui/invoices/pagination';
 import Search from '@/app/ui/search';
 import Table from '@/app/ui/clientes/table';
-import { CreateInvoice } from '@/app/ui/clientes/buttons';
+import { CreateClientes } from '@/app/ui/clientes/buttons';
 import { lusitana } from '@/app/ui/fonts'; 
 import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
 import { fetchInvoicesPages } from '@/app/lib/data';
 import { Metadata } from 'next';
+import { CreateInvoice } from '@/app/ui/invoices/buttons';
 
 export const metadata: Metadata = {
   title: 'GESTION DE CLIENTES',
@@ -31,8 +32,8 @@ export default async function Page({
         <h1 className={`${lusitana.className} text-2xl`}>GESTION DE CLIENTES</h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search facturas..." />
-        <CreateInvoice />
+        <Search placeholder="Search Clientes..." />
+        <CreateClientes/>
       </div>
       <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
         <Table query={query} currentPage={currentPage} /> 

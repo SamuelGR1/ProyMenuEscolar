@@ -4,6 +4,7 @@ import {
   CustomerField,
   CustomersTableType,
   InvoiceForm,
+  InvoiceFormclientes,
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
@@ -253,5 +254,35 @@ export async function fetchFilteredClientes(
     throw new Error('Failed to fetch clientes.');
   }
 }
+
+//actualizar.
+
+export async function fetchClienteById(id: string): Promise<clientes | null> {
+  try {
+      const data = await sql<clientes>`
+          SELECT
+              id_cliente,
+              nombre_cliente,
+              telefono_cliente,
+              direccion_cliente,
+              fecha_registro
+          FROM clientes
+          WHERE id_cliente = ${id};
+      `;
+
+      if (data.rows.length === 0) {
+          return null; // Si no se encuentra el cliente, retorna null
+      }
+
+      // Asegúrate de que el resultado tenga la forma esperada
+      const cliente: clientes = data.rows[0] as clientes;
+
+      return cliente;
+  } catch (error) {
+      console.error('Database Error:', error);
+      throw new Error('Failed to fetch cliente.');
+  }
+}
+
 
 

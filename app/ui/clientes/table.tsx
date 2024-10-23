@@ -1,8 +1,9 @@
 import Image from 'next/image';
-import { UpdateInvoice, DeleteInvoice } from '@/app/ui/clientes/buttons';
+import { UpdateClientess, DeleteClientes } from '@/app/ui/clientes/buttons';
 import InvoiceStatus from '@/app/ui/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredClientes} from '@/app/lib/data';
+import { UpdateClientes } from '@/app/lib/actions';
 
 export default async function clientesTable({
   query,
@@ -99,8 +100,8 @@ export default async function clientesTable({
                   
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateInvoice id={cliente.id_cliente} />
-                      <DeleteInvoice id={cliente.id_cliente} />
+                      <UpdateClientess id={cliente.id_cliente} />
+                      <DeleteClientes id={cliente.id_cliente} />
                     </div>
                   </td>
                 </tr>

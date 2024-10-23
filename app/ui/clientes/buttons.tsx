@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { deleteInvoice } from '@/app/lib/actions';
 
 
-export function CreateInvoice() {
+export function CreateClientes() {
   return (
     <Link
       href="/dashboard/clientes/create"
@@ -15,7 +15,7 @@ export function CreateInvoice() {
   );
 }
 
-export function UpdateInvoice({ id }: { id: string }) {
+export function UpdateClientess({ id }: { id: string }) {
   return (
     <Link
     href={`/dashboard/clientes/${id}/edit`}
@@ -27,7 +27,7 @@ export function UpdateInvoice({ id }: { id: string }) {
 }
 
 
-export function DeleteInvoice({ id }: { id: string }) {
+export function DeleteClientes({ id }: { id: string }) {
   const deleteInvoiceWithId = deleteInvoice.bind(null, id);
 
   return (
