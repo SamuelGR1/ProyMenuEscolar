@@ -1,10 +1,14 @@
-import Formprod from '@/app/ui/vistaProductos/create-form';
+import Form from '@/app/ui/vistaProductos/create-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
-import { fetchCustomers } from '@/app/lib/data';
+import {fetchCategorias, fetchSubcategorias} from '@/app/lib/data';
  
 export default async function Page() {
-  const customers = await fetchCustomers();
+  const categorias = await fetchCategorias();
+  const subcategorias = await fetchSubcategorias();
+
  
+  
+
   return (
     <main>
       <Breadcrumbs
@@ -17,7 +21,7 @@ export default async function Page() {
           },
         ]}
       />
-      <Formprod customers={customers} />
+      <Form  categorias={categorias} subcategorias={subcategorias}/>
     </main>
   );
 }

@@ -17,6 +17,7 @@ export type categorias = {
   id_categoria: string;
   descripcion_categoria: string;
   
+  
 }
 export type subcategorias = {
   id_subcategoria: string;
@@ -25,14 +26,22 @@ export type subcategorias = {
 
 };
 
-export type productosField = {
+
+
+export type ProductsForm = {
   id_producto: string;
   descripcion_producto: string;
+  precio_costo: number;
+  precio_unitario: number;
+  descripcion_categoria: string;
+  descripcion_subcategoria: string;
+  fecha_modificacion: string;
 };
 
-
-
-
+// export type productosField = {
+//   id_producto: string;
+//   descripcion_producto: string;
+// };
 
 
 
@@ -68,6 +77,8 @@ export type Invoice = {
   status: 'pending' | 'paid';
   date: string;
 };
+
+
 
 export type Revenue = {
   month: string;

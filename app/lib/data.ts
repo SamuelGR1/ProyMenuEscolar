@@ -7,6 +7,8 @@ import {
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
+  categorias,
+  subcategorias,
 } from './definitions';
 import { formatCurrency } from './utils'; 
 
@@ -262,3 +264,42 @@ export async function fetchFilteredproductos(
   }
 }
 
+
+
+export async function fetchCategorias() {
+  try {
+    const data = await sql<categorias>`
+      SELECT
+        id_categoria,
+        descripcion_categoria
+      FROM categorias
+      ORDER BY descripcion_categoria ASC
+    `;
+
+    const categories = data.rows;
+    return categories;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all categories.');
+  }
+}
+
+
+export async function  fetchSubcategorias() {
+  try {
+    const data = await sql<subcategorias>`
+      SELECT  
+        id_subcategoria,
+        descripcion_subcategoria,
+        categoria_id
+      FROM subcategorias
+      ORDER BY descripcion_subcategoria ASC
+    `;
+
+    const categories = data.rows;
+    return categories;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all categories.');
+  }
+}

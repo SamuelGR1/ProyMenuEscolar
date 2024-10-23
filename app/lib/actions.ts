@@ -146,48 +146,63 @@ export async function authenticate(
   
 
 
-// Esquema de validación con Zod
+/// Esquema de validación con Zod
 const FormSchema = z.object({
-  descripcion_producto: z.string().min(1, {
+  idproducto: z.string().optional(), 
+  descripcionproducto: z.string().min(1, {
     message: 'La descripción del producto es obligatoria.',
   }),
-  precio_costo: z
+  preciocosto: z
     .preprocess((val) => Number(val), z.number().positive({ message: 'El precio debe ser mayor que 0.' })),
-  precio_unitario: z
+  preciounitario: z
     .preprocess((val) => Number(val), z.number().positive({ message: 'El precio unitario debe ser mayor que 0.' })),
-  categoria_id: z.string().min(1, { message: 'La categoría es obligatoria.' }),
-  subcategoria_id: z.string().min(1, { message: 'La subcategoría es obligatoria.' }),
+  categoriadescripcion: z.string().min(1, { message: 'La categoría es obligatoria.' }),
+  subcategoriadescripcion: z.string().min(1, { message: 'La subcategoría es obligatoria.' }),
+  fecha_modificacion: z.string().optional(), 
 });
 
-// Función para obtener el ID de categoría según su descripción
-async function getCategoriaIdByDescripcion(descripcion: string): Promise<number | null> {
-  const result = await sql`
-    SELECT id_categoria FROM categorias WHERE descripcion_categoria = ${descripcion} LIMIT 1;
-  `;
-  return result.rowCount > 0 ? result.rows[0].id_categoria : null;
-}
+export type Stateprod = {
+  errors?: {
+    descripcionproducto?: string[];
+    preciocosto?: string[];
+    preciounitario?: string[];
+    categoriadescripcion?: string[];
+    subcategoriadescripcion?: string[];
+  };
+  message?: string | null;
+};
 
-// Función para obtener el ID de subcategoría según su descripción
-async function getSubcategoriaIdByDescripcion(descripcion: string): Promise<number | null> {
-  const result = await sql`
-    SELECT id_subcategoria FROM subcategorias WHERE descripcion_subcategoria = ${descripcion} LIMIT 1;
-  `;
-  return result.rowCount > 0 ? result.rows[0].id_subcategoria : null;
-}
+// async function getCategoriaIdByDescripcion(descripcion: string): Promise<number | null> {
+//   const result = await sql`
+//     SELECT id_categoria 
+//     FROM categorias 
+//     WHERE TRIM(LOWER(descripcion_categoria)) = TRIM(LOWER(${descripcion})) 
+//     LIMIT 1;
+//   `;
+//   return result.rowCount > 0 ? result.rows[0].id_categoria : null;
+// }
 
-
+// async function getSubcategoriaIdByDescripcion(descripcion: string): Promise<number | null> {
+//   const result = await sql`
+//     SELECT id_subcategoria 
+//     FROM subcategorias 
+//     WHERE TRIM(LOWER(descripcion_subcategoria)) = TRIM(LOWER(${descripcion})) 
+//     LIMIT 1;
+//   `;
+//   return result.rowCount > 0 ? result.rows[0].id_subcategoria : null;
+// }
 
 
 
 // Función para crear un producto
-export async function createProduct(formData: FormData) {
+export async function createProduct(prevState: Stateprod, formData: FormData) {
   // Validar los datos usando Zod
   const validatedFields = FormSchema.safeParse({
-    descripcion_producto: formData.get('descripcion_producto'),
-    precio_costo: formData.get('precio_costo'),
-    precio_unitario: formData.get('precio_unitario'),
-    categoria_id: formData.get('categoria_id'), // Cambiado a ID
-    subcategoria_id: formData.get('subcategoria_id'), // Cambiado a ID
+    descripcionproducto: formData.get('descripcionproducto'),
+    preciocosto: formData.get('preciocosto'),
+    preciounitario: formData.get('preciounitario'),
+    categoriadescripcion: formData.get('categoriadescripcion'), // Cambiado a descripción
+    subcategoriadescripcion: formData.get('subcategoriadescripcion'), // Cambiado a descripción
   });
 
   // Si la validación falla, devolver los errores
@@ -198,34 +213,41 @@ export async function createProduct(formData: FormData) {
     };
   }
 
+
   const {
-    descripcion_producto,
-    precio_costo,
-    precio_unitario,
-    categoria_id,
-    subcategoria_id,
+    descripcionproducto,
+    preciocosto,
+    preciounitario,
+    categoriadescripcion, // Descripción
+    subcategoriadescripcion, // Descripción
   } = validatedFields.data;
 
-  // Obtener los IDs de categoría y subcategoría
-  const categoriaId = await getCategoriaIdByDescripcion(categoria_id);
-  const subcategoriaId = await getSubcategoriaIdByDescripcion(subcategoria_id);
+  const preciocostocent = preciocosto * 100;
+  const preciounitariocent = preciounitario * 100;
 
-  if (!categoriaId || !subcategoriaId) {
+
+  // Obtener los IDs de categoría y subcategoría
+  // const categoriaId = await getCategoriaIdByDescripcion(categoriadescripcion);
+  // const subcategoriaId = await getSubcategoriaIdByDescripcion(subcategoriadescripcion);
+  // const fechaModificacion = new Date(); 
+
+  if (!categoriadescripcion || !subcategoriadescripcion) {
     return { message: 'Categoría o subcategoría no encontrada.' };
   }
 
   try {
     // Insertar el nuevo producto en la base de datos
     await sql`
-      INSERT INTO productos (descripcion_producto, precio_costo, precio_unitario, categoria_id, subcategoria_id)
-      VALUES (${descripcion_producto}, ${precio_costo}, ${precio_unitario}, ${categoriaId}, ${subcategoriaId});
+     INSERT INTO productos (descripcion_producto, precio_costo, precio_unitario, categoria_id, subcategoria_id)
+      VALUES (${descripcionproducto}, ${preciocostocent}, ${preciounitariocent}, ${categoriadescripcion}, ${subcategoriadescripcion});
     `;
 
     revalidatePath('/dashboard/vistaProductos'); // Revalidar la caché
     redirect('/dashboard/vistaProductos'); // Redirigir al usuario
-    return { message: 'Producto creado con éxito.' };
+   
   } catch (error) {
     console.error('Error al insertar producto:', error);
     return { message: 'Error en la base de datos: No se pudo crear el producto.' };
   }
+ 
 }
