@@ -232,6 +232,7 @@ export async function fetchFilteredClientes(
   try {
     const client = await sql<clientes>`
   SELECT
+  clientes.id_cliente,
     clientes.nombre_cliente,
     clientes.telefono_cliente,
     clientes.direccion_cliente,
@@ -297,7 +298,8 @@ export async function fetchFilteredClientes(
 
 
 
-export async function fetchClienteById(id: string) {
+export async function fetchClienteById(id: string): Promise<clientes | null> {
+  
   try {
     const data = await sql<clientes>`
       SELECT
