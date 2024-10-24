@@ -19,6 +19,13 @@ const links = [
     icon: DocumentDuplicateIcon,
   },
   { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
+
+  {
+    name: 'Menu',
+    href: '/dashboard/menu',
+    icon: DocumentDuplicateIcon,
+  },
+
 ];
 
 
