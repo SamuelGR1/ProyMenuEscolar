@@ -31,7 +31,7 @@ export default function Form() {
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
-                id="name"
+                id="nombre_cliente"
                 name="nombre_cliente"
                 type="text"
                 placeholder="Nombre"
@@ -51,7 +51,7 @@ export default function Form() {
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
-                id="phone"
+                id="telefono_cliente"
                 name="telefono_cliente"
                 type="tel"
                 placeholder="Ingrese Número de Teléfono"
@@ -70,7 +70,7 @@ export default function Form() {
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
-                id="address"
+                id="direccion_cliente"
                 name="direccion_cliente"
                 type="text"
                 placeholder="Ingrese Dirección"
@@ -89,7 +89,7 @@ export default function Form() {
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
-                id="registrationDate"
+                id="fecha_registro"
                 name="fecha_registro"
                 type="date"
                 placeholder="Fecha"

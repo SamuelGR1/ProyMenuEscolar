@@ -219,7 +219,7 @@ export async function UpdateClientes  (
   formData: FormData,
 ): Promise<Stat> {
   const validatedFields = UpdateCliente.safeParse({
-    id_cliente:id,
+    
     nombre_cliente: formData.get('nombre_cliente'),
     telefono_cliente: formData.get('telefono_cliente'),
     direccion_cliente: formData.get('direccion_cliente'),
@@ -250,3 +250,20 @@ export async function UpdateClientes  (
   revalidatePath('/dashboard/clientes');
   redirect('/dashboard/clientes');
 }
+
+
+//Eliminar CLientes
+
+
+export async function deleteClientes(id_cliente: string) {
+
+
+  try {
+    await sql`DELETE FROM clientes WHERE id_cliente = ${id_cliente}`;
+    revalidatePath('/dashboard/clientes');
+    return { message: 'Deleted clientes.' };
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete clientes.' };
+  }
+}
+

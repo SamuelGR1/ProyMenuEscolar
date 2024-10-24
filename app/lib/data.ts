@@ -257,32 +257,68 @@ export async function fetchFilteredClientes(
 
 //actualizar.
 
-export async function fetchClienteById(id: string): Promise<clientes | null> {
+// export async function fetchClienteById(id: string): Promise<clientes | null> {
+//   if (!id) {
+//     console.error('fetchClienteById: ID es undefined');
+//     throw new Error('ID no válido');
+//   }
+
+//   console.log('ID recibido:', id); // Imprime el ID recibido
+
+//   try {
+//     // Asegúrate de que el ID sea el tipo correcto si es necesario
+//     const clienteId = Number(id); // O usa simplemente id si es un string válido
+
+//     const data = await sql<clientes>`
+//         SELECT
+//             id_cliente,
+//             nombre_cliente,
+//             telefono_cliente,
+//             direccion_cliente,
+//             fecha_registro
+//         FROM clientes
+//         WHERE id_cliente = ${clienteId}; // Usa clienteId aquí
+//     `;
+
+//     console.log('Query SQL:', data); // Imprime la consulta SQL ejecutada
+
+//     if (data.rows.length === 0) {
+//       return null; // Si no se encuentra el cliente, retorna null
+//     }
+
+//     const cliente: clientes = data.rows[0] as clientes;
+
+//     return cliente;
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error(`Failed to fetch cliente: `);
+//   }
+// }
+
+
+
+export async function fetchClienteById(id: string) {
   try {
-      const data = await sql<clientes>`
-          SELECT
-              id_cliente,
-              nombre_cliente,
-              telefono_cliente,
-              direccion_cliente,
-              fecha_registro
-          FROM clientes
-          WHERE id_cliente = ${id};
-      `;
+    const data = await sql<clientes>`
+      SELECT
+      clientes.id_cliente,
+        clientes.nombre_cliente,
+        clientes.telefono_cliente,
+        clientes.direccion_cliente,
+        clientes.fecha_registro
+      FROM clientes
+      WHERE clientes.id_cliente = ${id}; 
+    `;
 
-      if (data.rows.length === 0) {
-          return null; // Si no se encuentra el cliente, retorna null
-      }
+    if (data.rows.length === 0) {
+      console.log('No se encontró ningún cliente con el ID proporcionado.');
+      return null; // Maneja el caso en que no se encuentra el cliente
+    }
 
-      // Asegúrate de que el resultado tenga la forma esperada
-      const cliente: clientes = data.rows[0] as clientes;
-
-      return cliente;
+    // Retorna el primer cliente si existe
+    return data.rows[0];
   } catch (error) {
-      console.error('Database Error:', error);
-      throw new Error('Failed to fetch cliente.');
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch cliente.');
   }
 }
-
-
-
