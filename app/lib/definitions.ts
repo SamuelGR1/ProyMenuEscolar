@@ -35,7 +35,7 @@ export type ProductsForm = {
   precio_unitario: number;
   descripcion_categoria: string;
   descripcion_subcategoria: string;
-  fecha_modificacion: string;
+ 
 };
 
 // export type productosField = {
@@ -77,6 +77,7 @@ export type Invoice = {
   status: 'pending' | 'paid';
   date: string;
 };
+
 
 
 

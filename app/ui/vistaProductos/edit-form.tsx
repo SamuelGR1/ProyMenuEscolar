@@ -1,180 +1,168 @@
 'use client';
 
-import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
-import {
-  CheckIcon,
-  ClockIcon,
-  CurrencyDollarIcon,
-  UserCircleIcon,
-} from '@heroicons/react/24/outline';
+import { categorias, subcategorias, ProductsForm } from '@/app/lib/definitions';
+import { QueueListIcon, ClipboardDocumentListIcon, CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { updateInvoice, State } from '@/app/lib/actions';
+import { updateProduct, Stateprod } from '@/app/lib/actions';
 import { useActionState } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 
-export default function EditInvoiceForm({
-  invoice,
-  customers,
+export default function EditProducForm({
+  producto,
+  categorias,
+  subcategorias,
 }: {
-  invoice: InvoiceForm;
-  customers: CustomerField[];
+  producto: ProductsForm;
+  categorias: categorias[];
+  subcategorias: subcategorias[];
 }) {
-  const initialState: State = { message: null, errors: {} };
-  const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
-  const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
+  const initialState: Stateprod = { message: null, errors: {} };
+  const updateProductWithId = updateProduct.bind(null, producto.id_producto);
+  const [StateForm, formAction] = useActionState(updateProductWithId, initialState);
+
+  const [filteredSubcategories, setFilteredSubcategories] = useState<subcategorias[]>(subcategorias);
+  const [selectedCategory, setSelectedCategory] = useState<string>(producto.descripcion_categoria || '');
+
+  // Filtrar subcategorías según la categoría seleccionada al cargar la página
+  useEffect(() => {
+    const filtered = subcategorias.filter(
+      (sub) => String(sub.categoria_id) === selectedCategory
+    );
+    setFilteredSubcategories(filtered);
+  }, [selectedCategory, subcategorias]);
+
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(event.target.value); // Actualizar categoría seleccionada
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Evitar recarga de página
+    formAction();
+  };
 
   return (
-    <form action={formAction}>
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {/* Customer Name */}
-        <div className="mb-4">
-          <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Choose customer
-          </label>
-          <div className="relative">
-            <select
-              id="customer"
-              name="customerId"
-              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue={invoice.customer_id}
-            >
-              <option value="" disabled>
-                Select a customer
-              </option>
-              {customers.map((customer) => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.name}
-                </option>
-              ))}
-            </select>
-            <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-          </div>
-          {/* Mostrar error del cliente */}
-          {state.errors?.customerId && (
-            <p className="mt-1 text-sm text-red-600">
-              {state.errors.customerId[0]}
-            </p>
-          )}
+    <form onSubmit={handleSubmit}>
+      {/* Descripción del Producto */}
+      <div className="mb-4">
+        <label htmlFor="description" className="mb-2 block text-sm font-medium">
+          Ingresa el Producto
+        </label>
+        <div className="relative mt-2 rounded-md">
+          <input
+            id="description"
+            name="descripcionproducto"
+            type="text"
+            defaultValue={producto.descripcion_producto}
+            placeholder="Ingrese descripción"
+            className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            required
+          />
+          <ClipboardDocumentListIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
         </div>
-
-        {/* Invoice Amount */}
-        <div className="mb-4">
-          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Choose an amount
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="amount"
-                name="amount"
-                type="number"
-                step="0.01"
-                defaultValue={invoice.amount}
-                placeholder="Enter USD amount"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-            </div>
-          </div>
-          {/* Mostrar error del monto */}
-          {state.errors?.amount && (
-            <p className="mt-1 text-sm text-red-600">
-              {state.errors.amount[0]}
-            </p>
-          )}
-        </div>
-
-
- {/* Invoice Amount */}
-        <div className="mb-4">
-          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Choose an amount
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="amount"
-                name="amount"
-                type="number"
-                step="0.01"
-                defaultValue={invoice.amount}
-                placeholder="Enter USD amount"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-            </div>
-          </div>
-          {/* Mostrar error del monto */}
-          {state.errors?.amount && (
-            <p className="mt-1 text-sm text-red-600">
-              {state.errors.amount[0]}
-            </p>
-          )}
-        </div>
-
-
-        {/* Invoice Status */}
-        <fieldset>
-          <legend className="mb-2 block text-sm font-medium">
-            Set the invoice status
-          </legend>
-          <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
-            <div className="flex gap-4">
-              <div className="flex items-center">
-                <input
-                  id="pending"
-                  name="status"
-                  type="radio"
-                  value="pending"
-                  defaultChecked={invoice.status === 'pending'}
-                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
-                />
-                <label
-                  htmlFor="pending"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
-                >
-                  Pending <ClockIcon className="h-4 w-4" />
-                </label>
-              </div>
-              <div className="flex items-center">
-                <input
-                  id="paid"
-                  name="status"
-                  type="radio"
-                  value="paid"
-                  defaultChecked={invoice.status === 'paid'}
-                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
-                />
-                <label
-                  htmlFor="paid"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
-                >
-                  Paid <CheckIcon className="h-4 w-4" />
-                </label>
-              </div>
-            </div>
-          </div>
-          {/* Mostrar error de estado */}
-          {state.errors?.status && (
-            <p className="mt-1 text-sm text-red-600">
-              {state.errors.status[0]}
-            </p>
-          )}
-        </fieldset>
       </div>
+
+      {/* Precio Costo */}
+      <div className="mb-4">
+        <label htmlFor="costprice" className="mb-2 block text-sm font-medium">
+          Precio Costo
+        </label>
+        <div className="relative mt-2 rounded-md">
+          <input
+            id="costprice"
+            name="preciocosto"
+            type="number"
+            step="0.01"
+            defaultValue={producto.precio_costo}
+            placeholder="Enter GTQ cost price"
+            className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            required
+          />
+          <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+        </div>
+      </div>
+
+      {/* Precio Unitario */}
+      <div className="mb-4">
+        <label htmlFor="unitprice" className="mb-2 block text-sm font-medium">
+          Precio Unitario
+        </label>
+        <div className="relative mt-2 rounded-md">
+          <input
+            id="unitprice"
+            name="preciounitario"
+            type="number"
+            step="0.01"
+            defaultValue={producto.precio_unitario}
+            placeholder="Enter GTQ unit price"
+            className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            required
+          />
+          <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+        </div>
+      </div>
+
+      {/* Categoría */}
+      <div className="mb-4">
+        <label htmlFor="category" className="mb-2 block text-sm font-medium">
+          Selecciona Categoría
+        </label>
+        <div className="relative">
+          <select
+            id="category"
+            name="categoriadescripcion"
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            required
+          >
+            <option value="" disabled>
+              Categoría...
+            </option>
+            {categorias.map((categoria) => (
+              <option key={categoria.id_categoria} value={categoria.id_categoria}>
+                {categoria.descripcion_categoria}
+              </option>
+            ))}
+          </select>
+          <TagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+        </div>
+      </div>
+
+      {/* Subcategoría */}
+      <div className="mb-4">
+        <label htmlFor="subcategory" className="mb-2 block text-sm font-medium">
+          Selecciona Subcategoría
+        </label>
+        <div className="relative">
+          <select
+            id="subcategory"
+            name="subcategoriadescripcion"
+            className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            required
+          >
+            <option value="" disabled>
+              Subcategoría...
+            </option>
+            {filteredSubcategories.map((sub) => (
+              <option key={sub.id_subcategoria} value={sub.id_subcategoria}>
+                {sub.descripcion_subcategoria}
+              </option>
+            ))}
+          </select>
+          <TagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+        </div>
+      </div>
+
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/dashboard/invoices"
+          href="/dashboard/vistaProductos"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
-          Cancel
+          Cancelar
         </Link>
-        <Button type="submit">Edit Invoice</Button>
+        <Button type="submit">Guardar Producto</Button>
       </div>
-      {/* Mostrar mensaje general si existe */}
-      {state.message && (
-        <p className="mt-4 text-sm text-red-600">{state.message}</p>
-      )}
     </form>
   );
 }

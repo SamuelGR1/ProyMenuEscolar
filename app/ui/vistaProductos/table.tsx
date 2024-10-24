@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { UpdateInvoice, DeleteInvoice } from '@/app/ui/vistaProductos/buttons';
+import { UpdateProducto, DeleteInvoice } from '@/app/ui/vistaProductos/buttons';
 import InvoiceStatus from '@/app/ui/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredproductos } from '@/app/lib/data';
@@ -120,15 +120,12 @@ export default async function productotable({
                     </div>
                   </td>
 
-
-      
-
-                  {/* <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateInvoice id={producto.id_producto} />
-                      <DeleteInvoice id={producto.id_producto} />
+                      <UpdateProducto id={producto.id_producto} />
+                      {/* <DeleteInvoice id={producto.id_producto} /> */}
                     </div>
-                  </td> */}
+                  </td>
                 </tr>
               ))}
             </tbody>

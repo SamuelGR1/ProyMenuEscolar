@@ -1,6 +1,7 @@
 import { sql } from '@vercel/postgres';
 import {
   productos,
+  ProductsForm,
   CustomerField,
   CustomersTableType,
   InvoiceForm,
@@ -172,6 +173,7 @@ export async function fetchInvoiceById(id: string) {
   }
 }
 
+
 export async function fetchCustomers() {
   try {
     const data = await sql<CustomerField>`
@@ -223,6 +225,8 @@ export async function fetchFilteredCustomers(query: string) {
   }
 }
 
+
+//-------------------------------------------------------------------------
 
 const ITEMS_PER_PAGE = 5;
 export async function fetchFilteredproductos(
@@ -301,5 +305,39 @@ export async function  fetchSubcategorias() {
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all categories.');
+  }
+}
+
+
+export async function fetchProductoById(id: string) {
+  
+  try {
+    const data = await sql<ProductsForm>`
+      SELECT
+      productos.id_producto,
+        productos.descripcion_producto,
+        productos.precio_costo,
+        productos.precio_unitario,
+        categorias.descripcion_categoria,
+        subcategorias.descripcion_subcategoria  
+      FROM productos
+      JOIN categorias ON productos.categoria_id = categorias.id_categoria
+      JOIN subcategorias ON productos.subcategoria_id = subcategorias.id_subcategoria
+      WHERE productos.id_producto = ${id};
+
+    `;
+
+    const product = data.rows.map((product) => ({
+      ...product,
+      // Convert amount from cents to dollars
+      precio_costo: product.precio_costo / 100,
+      precio_unitario: product.precio_unitario / 100,
+    }));
+    
+    console.log(product); // Invoice is an empty array []
+    return product[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch product. fetchProductoById-data.ts');
   }
 }

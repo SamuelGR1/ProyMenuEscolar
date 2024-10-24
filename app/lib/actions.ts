@@ -87,6 +87,7 @@ const FormSchema1 = z.object({
       amount: formData.get('amount'),
       status: formData.get('status'),
     });
+    
    
     if (!validatedFields.success) {
       return {
@@ -161,8 +162,10 @@ const FormSchema = z.object({
   fecha_modificacion: z.string().optional(), 
 });
 
+
 export type Stateprod = {
   errors?: {
+    idproducto?: string[];
     descripcionproducto?: string[];
     preciocosto?: string[];
     preciounitario?: string[];
@@ -242,12 +245,64 @@ export async function createProduct(prevState: Stateprod, formData: FormData) {
       VALUES (${descripcionproducto}, ${preciocostocent}, ${preciounitariocent}, ${categoriadescripcion}, ${subcategoriadescripcion});
     `;
 
-    revalidatePath('/dashboard/vistaProductos'); // Revalidar la caché
-    redirect('/dashboard/vistaProductos'); // Redirigir al usuario
-   
+    
   } catch (error) {
     console.error('Error al insertar producto:', error);
     return { message: 'Error en la base de datos: No se pudo crear el producto.' };
   }
+  revalidatePath('/dashboard/vistaProductos'); // Revalidar la caché
+  redirect('/dashboard/vistaProductos'); // Redirigir al usuario
  
 }
+
+
+
+  export async function updateProduct(
+    id: string,
+    prevState: State,
+    formData: FormData,
+  ) {
+    const validatedFields = FormSchema.safeParse({
+      descripcionproducto: formData.get('descripcionproducto'),
+      preciocosto: formData.get('preciocosto'),
+      preciounitario: formData.get('preciounitario'),
+      categoriadescripcion: formData.get('categoriadescripcion'), // Cambiado a descripción
+      subcategoriadescripcion: formData.get('subcategoriadescripcion'), // Cambiado a descripción
+    });
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Update Invoice.',
+      };
+    }
+   
+    const {
+      descripcionproducto,
+      preciocosto,
+      preciounitario,
+      categoriadescripcion,
+      subcategoriadescripcion,
+    } = validatedFields.data;    
+    const preciocostocent = preciocosto * 100;
+    const preciounitariocent = preciounitario * 100;
+   
+    try {
+      await sql`
+      UPDATE productos
+      SET 
+        descripcion_producto = ${descripcionproducto},
+        precio_costo = ${preciocostocent},
+        precio_unitario = ${preciounitariocent},
+        categoria_id = ${categoriadescripcion},
+        subcategoria_id = ${subcategoriadescripcion}
+      WHERE id_producto = ${id};
+    `;
+    } catch (error) {
+      return { message: 'Database Error: Failed to Update Invoice.' };
+    }
+   
+    revalidatePath('/dashboard/vistaProductos');
+    redirect('/dashboard/vistaProductos');
+  }
+
+  
