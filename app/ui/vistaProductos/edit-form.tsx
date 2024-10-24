@@ -1,6 +1,6 @@
 'use client';
 
-import { categorias, subcategorias, ProductsForm } from '@/app/lib/definitions';
+import {  categorias, subcategorias, ProductsForm } from '@/app/lib/definitions';
 import { QueueListIcon, ClipboardDocumentListIcon, CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
@@ -42,8 +42,8 @@ export default function EditProducForm({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/* Descripción del Producto */}
+    <form action={formAction}> {/* Cambiar a onSubmit */}
+      {/* Product Description */}
       <div className="mb-4">
         <label htmlFor="description" className="mb-2 block text-sm font-medium">
           Ingresa el Producto
@@ -58,11 +58,11 @@ export default function EditProducForm({
             className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
             required
           />
-          <ClipboardDocumentListIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          <ClipboardDocumentListIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
         </div>
       </div>
 
-      {/* Precio Costo */}
+      {/* Cost Price */}
       <div className="mb-4">
         <label htmlFor="costprice" className="mb-2 block text-sm font-medium">
           Precio Costo
@@ -72,17 +72,17 @@ export default function EditProducForm({
             id="costprice"
             name="preciocosto"
             type="number"
-            step="0.01"
             defaultValue={producto.precio_costo}
+            step="0.01"
             placeholder="Enter GTQ cost price"
             className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
             required
           />
-          <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
         </div>
       </div>
 
-      {/* Precio Unitario */}
+      {/* Unit Price */}
       <div className="mb-4">
         <label htmlFor="unitprice" className="mb-2 block text-sm font-medium">
           Precio Unitario
@@ -92,34 +92,33 @@ export default function EditProducForm({
             id="unitprice"
             name="preciounitario"
             type="number"
-            step="0.01"
             defaultValue={producto.precio_unitario}
+            step="0.01"
             placeholder="Enter GTQ unit price"
             className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
             required
           />
-          <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
         </div>
       </div>
 
-      {/* Categoría */}
+      {/* Category Dropdown */}
       <div className="mb-4">
         <label htmlFor="category" className="mb-2 block text-sm font-medium">
-          Selecciona Categoría
+          Selecciona Categoria
         </label>
         <div className="relative">
           <select
             id="category"
             name="categoriadescripcion"
-            value={selectedCategory}
-            onChange={handleCategoryChange}
+            defaultValue={producto.descripcion_categoria}
             className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-            required
+            onChange={handleCategoryChange}
           >
             <option value="" disabled>
-              Categoría...
+            Categoria...
             </option>
-            {categorias.map((categoria) => (
+            {categorias.map(categoria => (
               <option key={categoria.id_categoria} value={categoria.id_categoria}>
                 {categoria.descripcion_categoria}
               </option>
@@ -127,39 +126,56 @@ export default function EditProducForm({
           </select>
           <TagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
         </div>
+        <div aria-live="polite" aria-atomic="true">
+          {StateForm.errors?.categoriadescripcion &&
+            StateForm.errors.categoriadescripcion.map((error: string) => (
+              <p className="mt-2 text-sm text-red-500" key={error}>
+                {error}
+              </p>
+            ))}
+        </div>
       </div>
 
-      {/* Subcategoría */}
+      {/* Subcategory Dropdown */}
       <div className="mb-4">
         <label htmlFor="subcategory" className="mb-2 block text-sm font-medium">
-          Selecciona Subcategoría
+        Selecciona subcategoria
         </label>
         <div className="relative">
           <select
             id="subcategory"
             name="subcategoriadescripcion"
             className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-            required
+            defaultValue={producto.descripcion_subcategoria}
           >
             <option value="" disabled>
-              Subcategoría...
+            subcategoria...
             </option>
-            {filteredSubcategories.map((sub) => (
-              <option key={sub.id_subcategoria} value={sub.id_subcategoria}>
-                {sub.descripcion_subcategoria}
-              </option>
-            ))}
+            {
+              filteredSubcategories.map(subcategoria => (
+                <option key={subcategoria.id_subcategoria} value={subcategoria.id_subcategoria}>
+                  {subcategoria.descripcion_subcategoria}
+                </option>
+              ))}
+           
           </select>
           <TagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
         </div>
+        <div aria-live="polite" aria-atomic="true">
+          {StateForm.errors?.subcategoriadescripcion &&
+            StateForm.errors.subcategoriadescripcion.map((error: string) => (
+              <p className="mt-2 text-sm text-red-500" key={error}>
+                {error}
+              </p>
+            ))}
+        </div>
       </div>
-
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href="/dashboard/vistaProductos"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
-          Cancelar
+          Cancel
         </Link>
         <Button type="submit">Guardar Producto</Button>
       </div>
