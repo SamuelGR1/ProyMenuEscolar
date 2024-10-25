@@ -21,7 +21,21 @@ const links = [
   { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
   { name: 'vistaProductos', href: '/dashboard/vistaProductos', icon: UserGroupIcon },
   { name: 'Menu', href: '/dashboard/menu', icon: HomeIcon },
+
+  {
+    name: 'clientes',
+    href: '/dashboard/clientes',
+    icon: DocumentDuplicateIcon,
+  },
+
+  {
+    name: 'menu_del_dia ',
+    href: '/dashboard/menu_del_dia',
+    icon: DocumentDuplicateIcon,
+  },
+
 ];
+
 
 
 export default function NavLinks() {
