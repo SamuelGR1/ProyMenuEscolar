@@ -2,6 +2,75 @@
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
 // However, these types are generated automatically if you're using an ORM such as Prisma.
+
+export type InvoiceFormclientes = {
+  id_cliente: string;
+  nombre_cliente: string;
+  telefono_cliente: string;
+  direccion_cliente: string;
+  fecha_registro: string;
+};
+
+
+export type configuracion_menus ={
+  id_configuracion: string;
+  cliente_id: string;
+  menu_id: string;
+  dia_semana: string;
+  fecha_configuracion: string;
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export type User = {
   id: string;
   name: string;
@@ -97,12 +166,4 @@ export type clientes ={
 };
 
 
-
-export type InvoiceFormclientes = {
-  id_cliente: string;
-  nombre_cliente: string;
-  telefono_cliente: string;
-  direccion_cliente: string;
-  fecha_registro: string;
-};
 
