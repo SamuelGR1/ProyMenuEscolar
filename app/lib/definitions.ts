@@ -2,6 +2,114 @@
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
 // However, these types are generated automatically if you're using an ORM such as Prisma.
+
+export type productos = {
+  id_producto: string;
+  descripcion_producto: string;
+  precio_costo: number;
+  precio_unitario: number;
+  descripcion_categoria: string;
+  descripcion_subcategoria: string;
+  fecha_modificacion: string;
+};
+
+export type categorias = {
+  id_categoria: string;
+  descripcion_categoria: string;
+  
+  
+}
+export type subcategorias = {
+  id_subcategoria: string;
+  descripcion_subcategoria: string;
+  categoria_id: string
+};
+
+export type InvoiceFormclientes = {
+  id_cliente: string;
+  nombre_cliente: string;
+  telefono_cliente: string;
+  direccion_cliente: string;
+  fecha_registro: string;
+};
+
+
+export type configuracion_menus ={
+  id_configuracion: string;
+  cliente_id: string;
+  menu_id: string;
+  dia_semana: string;
+  fecha_configuracion: string;
+
+
+};
+
+
+
+
+export type ProductsForm = {
+  id_producto: string;
+  descripcion_producto: string;
+  precio_costo: number; 
+  precio_unitario: number;
+  descripcion_categoria: string;
+  descripcion_subcategoria: string;
+
+};
+
+// export type productosField = {
+//   id_producto: string;
+//   descripcion_producto: string;
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export type User = {
   id: string;
   name: string;
@@ -23,6 +131,9 @@ export type Invoice = {
   status: 'pending' | 'paid';
   date: string;
 };
+
+
+
 
 export type Revenue = {
   month: string;
@@ -84,3 +195,17 @@ export type InvoiceForm = {
   amount: number;
   status: 'pending' | 'paid';
 };
+
+
+export type clientes ={
+  id_cliente: string;
+  nombre_cliente: string;
+  telefono_cliente: string;
+  direccion_cliente: string;
+  fecha_registro: string;
+
+
+};
+
+
+
