@@ -36,10 +36,10 @@ export default function EditProducForm({
     setSelectedCategory(event.target.value); // Actualizar categoría seleccionada
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Evitar recarga de página
-    formAction();
-  };
+  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault(); // Evitar recarga de página
+  //   formAction();
+  // };
 
   return (
     <form action={formAction}> {/* Cambiar a onSubmit */}

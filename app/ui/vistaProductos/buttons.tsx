@@ -1,6 +1,6 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteInvoice } from '@/app/lib/actions';
+import { deleteProductos } from '@/app/lib/actions';
 
 
 export function Createproducto() {
@@ -26,27 +26,12 @@ export function UpdateProducto({ id }: { id: string }) {
   );
 }
 
-//-----------------------------------------------------------------------------------
-
-
-// export function UpdateInvoice({ id }: { id: string }) {
-//   return (
-//     <Link
-//     href={`/dashboard/Unvoices/${id}/edit`}
-//       className="rounded-md border p-2 hover:bg-gray-100"
-//     >
-//       <PencilIcon className="w-5" />
-//     </Link>
-//   );
-// }
-
-
-export function DeleteInvoice({ id }: { id: string }) {
-  const deleteInvoiceWithId = deleteInvoice.bind(null, id);
+export function DeleteProducto({ id }: { id: string }) {
+  const deleteProdutoWithId = deleteProductos.bind(null, id);
 
   return (
   
-    <form action={deleteInvoiceWithId}>
+    <form action={deleteProdutoWithId}>
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Delete</span>
         <TrashIcon className="w-5" />
@@ -54,3 +39,5 @@ export function DeleteInvoice({ id }: { id: string }) {
       </form>
   );
 }
+
+//samuel-----------------------------------------------------------------------------------
