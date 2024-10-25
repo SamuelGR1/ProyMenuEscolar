@@ -2,6 +2,7 @@
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
 // However, these types are generated automatically if you're using an ORM such as Prisma.
+
 export type User = {
   id: string;
   name: string;
@@ -84,3 +85,38 @@ export type InvoiceForm = {
   amount: number;
   status: 'pending' | 'paid';
 };
+
+// Nuevas definiciones para Menús
+
+export type Menu = {
+  id_menu: string; // ID del menú
+  descripcion_menu: string; // Descripción del menú
+  costo_total: number; // Costo total del menú
+  fecha_creacion: string; // Fecha de creación en formato ISO
+};
+
+export type MenuForm = {
+  id_menu: string; // ID del menú
+  descripcion_menu: string; // Descripción del menú
+  costo_total: number; // Costo total del menú
+};
+
+// Representación de los menús en la tabla
+export type MenusTable = {
+  id_menu: string; // ID del menú
+  descripcion_menu: string; // Descripción del menú
+  costo_total: number; // Costo total del menú
+  fecha_creacion: string; // Fecha de creación en formato ISO
+};
+
+// Definición para MenuField
+export type MenuField = {
+  id_menu: string; 
+  descripcion_menu: string;
+  costo_total: number; 
+  fecha_creacion: string; 
+};
+
+
+
+
