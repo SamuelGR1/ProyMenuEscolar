@@ -230,7 +230,7 @@ export async function fetchFilteredCustomers(query: string) {
 
 const ITEMS_PER_PAGE = 5;
 export async function fetchFilteredproductos(
-  query: string,
+  query: string,  
   currentPage: number,
 ) {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -238,6 +238,7 @@ export async function fetchFilteredproductos(
   try {
     const product = await sql<productos>
     ` SELECT
+        productos.id_producto,
         productos.descripcion_producto,
         productos.precio_costo,
         productos.precio_unitario,
@@ -326,6 +327,9 @@ export async function fetchProductoById(id: string) {
       WHERE productos.id_producto = ${id};
 
     `;
+
+    console.log('Data from query:', data);  // Verifica si la consulta devuelve datos
+
 
     const product = data.rows.map((product) => ({
       ...product,

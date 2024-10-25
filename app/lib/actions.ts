@@ -259,7 +259,7 @@ export async function createProduct(prevState: Stateprod, formData: FormData) {
 
   export async function updateProduct(
     id: string,
-    prevState: State,
+    prevState: Stateprod,
     formData: FormData,
   ) {
     const validatedFields = FormSchema.safeParse({
@@ -297,6 +297,8 @@ export async function createProduct(prevState: Stateprod, formData: FormData) {
         subcategoria_id = ${subcategoriadescripcion}
       WHERE id_producto = ${id};
     `;
+
+    
     } catch (error) {
       return { message: 'Database Error: Failed to Update Invoice.' };
     }

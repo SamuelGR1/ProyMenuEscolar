@@ -20,6 +20,7 @@ const links = [
   },
   { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
   { name: 'vistaProductos', href: '/dashboard/vistaProductos', icon: UserGroupIcon },
+  { name: 'Menu', href: '/dashboard/menu', icon: HomeIcon },
 ];
 
 

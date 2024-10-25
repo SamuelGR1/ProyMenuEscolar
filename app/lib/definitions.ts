@@ -31,11 +31,11 @@ export type subcategorias = {
 export type ProductsForm = {
   id_producto: string;
   descripcion_producto: string;
-  precio_costo: number;
+  precio_costo: number; 
   precio_unitario: number;
   descripcion_categoria: string;
   descripcion_subcategoria: string;
- 
+
 };
 
 // export type productosField = {

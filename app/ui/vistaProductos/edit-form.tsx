@@ -179,6 +179,10 @@ export default function EditProducForm({
         </Link>
         <Button type="submit">Guardar Producto</Button>
       </div>
+       {/* Mostrar mensaje general si existe */}
+       {StateForm.message && (
+        <p className="mt-4 text-sm text-red-600">{StateForm.message}</p>
+      )}
     </form>
   );
 }
