@@ -24,7 +24,14 @@ const links = [
     href: '/dashboard/clientes',
     icon: DocumentDuplicateIcon,
   },
+
+  {
+    name: 'menu_del_dia ',
+    href: '/dashboard/menu_del_dia',
+    icon: DocumentDuplicateIcon,
+  },
 ];
+
 
 
 export default function NavLinks() {
