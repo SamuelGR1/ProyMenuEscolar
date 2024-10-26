@@ -13,14 +13,12 @@ import clsx from 'clsx';
 // Depending on the size of the application, this would be stored in a database.
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
-  {
-    name: 'Invoices',
-    href: '/dashboard/invoices',
-    icon: DocumentDuplicateIcon,
-  },
-  { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
-  { name: 'vistaProductos', href: '/dashboard/vistaProductos', icon: UserGroupIcon },
-  { name: 'Menu', href: '/dashboard/menu', icon: HomeIcon },
+  // {
+  //   name: 'Invoices',
+  //   href: '/dashboard/invoices',
+  //   icon: DocumentDuplicateIcon,
+  // },
+  // { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
 
   {
     name: 'clientes',
@@ -28,6 +26,10 @@ const links = [
     icon: DocumentDuplicateIcon,
   },
 
+  { name: 'vistaProductos', href: '/dashboard/vistaProductos', icon: UserGroupIcon },
+  { name: 'Menu', href: '/dashboard/menu', icon: HomeIcon },
+
+  
   {
     name: 'menu_del_dia ',
     href: '/dashboard/menu_del_dia',
