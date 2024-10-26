@@ -6,19 +6,21 @@ import {
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
+  MenuField,
+  MenusTable,
+  MenuForm,
 } from './definitions';
-import { formatCurrency } from './utils'; 
+import { formatCurrency } from './utils';
 
+const ITEMS_PER_PAGE = 6;
+
+// Funciones de facturas y clientes
 export async function fetchRevenue() {
   try {
-    // Artificially delay a response for demo purposes.
-    // Don't do this in production :)
-
     console.log('Fetching revenue data...');
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const data = await sql<Revenue>`SELECT * FROM revenue`;
-
     console.log('Data fetch completed after 3 seconds.');
 
     return data.rows;
@@ -50,9 +52,6 @@ export async function fetchLatestInvoices() {
 
 export async function fetchCardData() {
   try {
-    // You can probably combine these into a single SQL query
-    // However, we are intentionally splitting them to demonstrate
-    // how to initialize multiple queries in parallel with JS.
     const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
     const invoiceStatusPromise = sql`SELECT
@@ -83,11 +82,7 @@ export async function fetchCardData() {
   }
 }
 
-const ITEMS_PER_PAGE = 6;
-export async function fetchFilteredInvoices(
-  query: string,
-  currentPage: number,
-) {
+export async function fetchFilteredInvoices(query: string, currentPage: number) {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
@@ -109,8 +104,7 @@ export async function fetchFilteredInvoices(
         invoices.date::text ILIKE ${`%${query}%`} OR
         invoices.status ILIKE ${`%${query}%`}
       ORDER BY invoices.date DESC
-      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-    `;
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}`;
 
     return invoices.rows;
   } catch (error) {
@@ -129,8 +123,7 @@ export async function fetchInvoicesPages(query: string) {
       customers.email ILIKE ${`%${query}%`} OR
       invoices.amount::text ILIKE ${`%${query}%`} OR
       invoices.date::text ILIKE ${`%${query}%`} OR
-      invoices.status ILIKE ${`%${query}%`}
-  `;
+      invoices.status ILIKE ${`%${query}%`}`;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
     return totalPages;
@@ -141,7 +134,6 @@ export async function fetchInvoicesPages(query: string) {
 }
 
 export async function fetchInvoiceById(id: string) {
-  
   try {
     const data = await sql<InvoiceForm>`
       SELECT
@@ -150,16 +142,14 @@ export async function fetchInvoiceById(id: string) {
         invoices.amount,
         invoices.status
       FROM invoices
-      WHERE invoices.id = ${id};
-    `;
+      WHERE invoices.id = ${id};`;
 
     const invoice = data.rows.map((invoice) => ({
       ...invoice,
-      // Convert amount from cents to dollars
       amount: invoice.amount / 100,
     }));
-    
-    console.log(invoice); // Invoice is an empty array []
+
+    console.log(invoice);
     return invoice[0];
   } catch (error) {
     console.error('Database Error:', error);
@@ -174,11 +164,9 @@ export async function fetchCustomers() {
         id,
         name
       FROM customers
-      ORDER BY name ASC
-    `;
+      ORDER BY name ASC`;
 
-    const customers = data.rows;
-    return customers;
+    return data.rows;
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all customers.');
@@ -200,20 +188,96 @@ export async function fetchFilteredCustomers(query: string) {
 		LEFT JOIN invoices ON customers.id = invoices.customer_id
 		WHERE
 		  customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`}
+          customers.email ILIKE ${`%${query}%`}
 		GROUP BY customers.id, customers.name, customers.email, customers.image_url
-		ORDER BY customers.name ASC
-	  `;
+		ORDER BY customers.name ASC`;
 
-    const customers = data.rows.map((customer) => ({
+    return data.rows.map((customer) => ({
       ...customer,
       total_pending: formatCurrency(customer.total_pending),
       total_paid: formatCurrency(customer.total_paid),
     }));
-
-    return customers;
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch customer table.');
   }
 }
+
+// Funciones de menús
+export async function fetchMenus() {
+  try {
+    const data = await sql<MenuField>`SELECT * FROM menus`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch menus.');
+  }
+}
+
+export async function fetchMenuById(id: string) {
+  try {
+    const data = await sql<MenuForm>`
+      SELECT
+        id_menu,
+        descripcion_menu,
+        costo_total,
+        fecha_creacion
+      FROM menus
+      WHERE id_menu = ${id};`;
+
+    const menu = data.rows.map((menu) => ({
+      ...menu,
+      costo_total: menu.costo_total.toFixed(2),
+    }));
+
+    console.log(menu);
+    return menu[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch menu.');
+  }
+}
+
+export async function createMenu(menuData: MenuForm) {
+  try {
+    const { descripcion_menu, costo_total } = menuData;
+    const result = await sql`INSERT INTO menus (descripcion_menu, costo_total) VALUES (${descripcion_menu}, ${costo_total}) RETURNING *`;
+    return result.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to create menu.');
+  }
+}
+
+export async function fetchFilteredMenus(query: string) {
+  try {
+    const data = await sql<MenusTable>`
+      SELECT
+        id_menu,
+        descripcion_menu,
+        costo_total,
+        fecha_creacion
+      FROM menus
+      WHERE
+        descripcion_menu ILIKE ${`%${query}%`}
+      ORDER BY fecha_creacion DESC
+      LIMIT ${ITEMS_PER_PAGE}`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch filtered menus.');
+  }
+}
+
+export async function fetchMenusPages(query: string) {
+  try {
+    const count = await sql`SELECT COUNT(*) FROM menus WHERE descripcion_menu ILIKE ${`%${query}%`}`;
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of menus.');
+  }
+}
+
