@@ -3,6 +3,9 @@
 // For simplicity of teaching, we're manually defining these types.
 // However, these types are generated automatically if you're using an ORM such as Prisma.
 
+
+//para Productos-------------------------------------------------------
+
 export type productos = {
   id_producto: string;
   descripcion_producto: string;
@@ -25,6 +28,17 @@ export type subcategorias = {
   categoria_id: string
 };
 
+
+export type ProductsForm = {
+  id_producto: string;
+  descripcion_producto: string;
+  precio_costo: number; 
+  precio_unitario: number;
+  descripcion_categoria: string;
+  descripcion_subcategoria: string;
+
+};
+//para clientes-------------------------------------------------------
 export type InvoiceFormclientes = {
   id_cliente: string;
   nombre_cliente: string;
@@ -33,6 +47,15 @@ export type InvoiceFormclientes = {
   fecha_registro: string;
 };
 
+export type clientes ={
+  id_cliente: string;
+  nombre_cliente: string;
+  telefono_cliente: string;
+  direccion_cliente: string;
+  fecha_registro: string;
+
+
+};
 
 export type configuracion_menus ={
   id_configuracion: string;
@@ -47,15 +70,6 @@ export type configuracion_menus ={
 
 
 
-export type ProductsForm = {
-  id_producto: string;
-  descripcion_producto: string;
-  precio_costo: number; 
-  precio_unitario: number;
-  descripcion_categoria: string;
-  descripcion_subcategoria: string;
-
-};
 
 // export type productosField = {
 //   id_producto: string;
@@ -197,15 +211,7 @@ export type InvoiceForm = {
 };
 
 
-export type clientes ={
-  id_cliente: string;
-  nombre_cliente: string;
-  telefono_cliente: string;
-  direccion_cliente: string;
-  fecha_registro: string;
 
-
-};
 
 
 

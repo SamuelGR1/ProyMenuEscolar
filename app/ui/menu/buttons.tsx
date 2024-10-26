@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { deleteClientes} from '@/app/lib/actions';
 
 
-export function CreateClientes() {
+export function Createmenu() {
   return (
     <Link
       href="/dashboard/menu/create"
@@ -40,4 +40,3 @@ export function DeleteClientes({ id }: { id: string }) {
       </form>
   );
 }
-//Fernanda-------------------------------------------------------------------------------------

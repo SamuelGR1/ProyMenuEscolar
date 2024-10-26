@@ -26,7 +26,7 @@ export default function Form() {
         {/* Customer Name */}
         <div className="mb-4">
           <label htmlFor="name" className="mb-2 block text-sm font-medium">
-           Nombre menu
+            Ingrese Nombre
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -46,7 +46,7 @@ export default function Form() {
         {/* Phone Number */}
         <div className="mb-4">
           <label htmlFor="telefono_cliente" className="mb-2 block text-sm font-medium">
-           Costo total
+            Ingrese Teléfono
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -54,7 +54,26 @@ export default function Form() {
                 id="telefono_cliente"
                 name="telefono_cliente"
                 type="tel"
-                placeholder="Costo Actualizable"
+                placeholder="Ingrese Número de Teléfono"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Address */}
+        <div className="mb-4">
+          <label htmlFor="address" className="mb-2 block text-sm font-medium">
+            Ingrese Dirección
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="direccion_cliente"
+                name="direccion_cliente"
+                type="text"
+                placeholder="Ingrese Dirección"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 required
               />
@@ -65,7 +84,7 @@ export default function Form() {
         {/* Registration Date */}
         <div className="mb-4">
           <label htmlFor="registrationDate" className="mb-2 block text-sm font-medium">
-             Fecha de Registro
+            Ingrese Fecha de Registro
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -84,7 +103,7 @@ export default function Form() {
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/dashboard/menu"
+          href="/dashboard/clientes"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancel
