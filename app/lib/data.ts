@@ -324,6 +324,12 @@ export async function fetchFilteredMenudia(
     throw new Error('Failed to fetch clientes.');
   }
 }
+
+
+
+
+
+
 //FIN fernanda-------------------------------------------------------------------------
 
 const ITEMS_PER_PAGE = 5;

@@ -44,6 +44,16 @@ export type configuracion_menus ={
 
 };
 
+export type menus ={
+  id_menu: string;
+  descripcion_menu: string;
+  menu_id: string;
+  costo_tomal: number;
+  fecha_creacion: string;
+
+
+};
+
 
 
 
@@ -63,7 +73,11 @@ export type ProductsForm = {
 // };
 
 
-
+export type CustomerFieldmenudia = {
+  id_configuracion: string;
+  cliente_id: string;
+  menu_id: string;
+};
 
 
 
