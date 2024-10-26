@@ -1,18 +1,16 @@
-import Formmenudia from '@/app/ui/menu_del_dia/create-form'; // Asegúrate de que el nombre del componente es correcto
+import Formmenudia from '@/app/ui/menu_del_dia/create-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
-import { fetchFilteredMenudia, fetchFilteredClientes } from '@/app/lib/data'; // Asegúrate de importar ambas funciones
-import { clientes, CustomerFieldmenudia } from '@/app/lib/definitions'; // Importa las definiciones necesarias
+import { fetchFilteredMenudia, fetchFilteredClientes } from '@/app/lib/data';
+import { clientes, menus } from '@/app/lib/definitions';
 
 export default async function Page() {
-  const queryMenudia = ''; // Define tu consulta para el menú del día aquí
-  const currentPageMenudia = 1; // Número de página actual para el menú del día
+  const queryMenudia = ''; 
+  const currentPageMenudia = 1;
+  const queryClientes = ''; 
+  const currentPageClientes = 1;
 
-  const queryClientes = ''; // Define tu consulta para los clientes aquí
-  const currentPageClientes = 1; // Número de página actual para los clientes
-
-  // Obtener los datos necesarios
-  const customerFieldmenudia: CustomerFieldmenudia[] = await fetchFilteredMenudia(queryMenudia, currentPageMenudia);
-  const clientesData: clientes[] = await fetchFilteredClientes(queryClientes, currentPageClientes); // Ahora pasamos los argumentos requeridos
+  const clientesData: clientes[] = await fetchFilteredClientes(queryClientes, currentPageClientes);
+  const menusData: menus[] = await fetchFilteredMenudia(queryMenudia, currentPageMenudia);
 
   return (
     <main>
@@ -27,8 +25,8 @@ export default async function Page() {
         ]}
       />
       <Formmenudia
-        clientes={clientesData} // Pasar la lista de clientes
-        customerFieldmenudia={customerFieldmenudia} // Pasar las subcategorías filtradas
+        clientes={clientesData}
+        menu={menusData}
       />
     </main>
   );

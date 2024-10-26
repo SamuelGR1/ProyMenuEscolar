@@ -38,24 +38,21 @@ export type configuracion_menus ={
   id_configuracion: string;
   cliente_id: string;
   menu_id: string;
+  id_menu:string;
   dia_semana: string;
   fecha_configuracion: string;
-
+  descripcion_menu: string;
+  
 
 };
 
 export type menus ={
-  id_menu: string;
+
   descripcion_menu: string;
-  menu_id: string;
-  costo_tomal: number;
-  fecha_creacion: string;
-
-
+  id_menu: string;
+  
+ 
 };
-
-
-
 
 export type ProductsForm = {
   id_producto: string;
@@ -77,6 +74,7 @@ export type CustomerFieldmenudia = {
   id_configuracion: string;
   cliente_id: string;
   menu_id: string;
+  descripcion_menu: string;
 };
 
 

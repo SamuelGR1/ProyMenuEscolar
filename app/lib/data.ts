@@ -13,6 +13,8 @@ import {
   Revenue,
   categorias,
   subcategorias,
+  menus,
+  CustomerFieldmenudia,
 } from './definitions';
 import { formatCurrency } from './utils'; 
 export async function fetchRevenue() {
@@ -305,8 +307,10 @@ export async function fetchFilteredMenudia(
           c.direccion_cliente,
           cm.id_configuracion,
           cm.menu_id,
+        
           cm.dia_semana,
           cm.fecha_configuracion,
+  m.id_menu,
           m.descripcion_menu,
           m.costo_total
       FROM 
@@ -322,6 +326,27 @@ export async function fetchFilteredMenudia(
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch clientes.');
+  }
+}
+
+
+
+export async function  fetchSubmenus() {
+  try {
+    const data = await sql<menus>`
+      SELECT  
+        descripcion_menu,
+        id_menu,
+    
+      FROM menus
+      ORDER BY descripcion_menu ASC
+    `;
+
+    const menus = data.rows;
+    return menus;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all menus.');
   }
 }
 
