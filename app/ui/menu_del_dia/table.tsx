@@ -2,17 +2,17 @@ import Image from 'next/image';
 import { UpdateClientess, DeleteClientes } from '@/app/ui/clientes/buttons';
 import InvoiceStatus from '@/app/ui/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
-import { fetchFilteredClientes} from '@/app/lib/data';
+import { fetchFilteredClientes, fetchFilteredMenudia} from '@/app/lib/data';
 import { UpdateClientes } from '@/app/lib/actions';
 
-export default async function clientesTable({
+export default async function menudiaTable({
   query,
   currentPage,
 }: {
   query: string;
   currentPage: number;
 }) {
-  const clientes = await fetchFilteredClientes(query, currentPage);
+  const menu = await fetchFilteredMenudia(query, currentPage);
 
   return (
     <div className="mt-6 flow-root">
@@ -64,40 +64,45 @@ export default async function clientesTable({
                 <th scope="col" className="px-3 py-5 font-medium">
                   descripcion_menu
                 </th>
-                
+                <th scope="col" className="px-3 py-5 font-medium">
+                 dia_semana
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                fecha_configuracion
+                </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white">
-              {clientes?.map((cliente) => (
+              {menu?.map((cliente) => (
                 
                 <tr
-                  key={cliente.id_cliente}
+                  key={cliente.cliente_id}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
                   
-                      <p>{cliente.nombre_cliente}</p>
+                      <p>{cliente.id_configuracion}</p>
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {cliente.telefono_cliente}
+                    {cliente.cliente_id}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {cliente.direccion_cliente}
+                    {cliente.menu_id}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatDateToLocal(cliente.fecha_registro)}
+                    {formatDateToLocal(cliente.fecha_configuracion)}
                   </td>
                   
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
                       
-                      <UpdateClientess id={cliente.id_cliente} />
-                      <DeleteClientes id={cliente.id_cliente} />
+                      <UpdateClientess id={cliente.id_configuracion} />
+                      <DeleteClientes id={cliente.id_configuracion} />
                     </div>
                   </td>
                 </tr>

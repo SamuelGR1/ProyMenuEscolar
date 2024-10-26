@@ -28,6 +28,32 @@ export async function authenticate(
   }
 }
 
+const FormSchemas = z.object({
+  id_configuracion: z.string().optional(),  // Lo hacemos opcional
+  cliente_id: z.string({
+    invalid_type_error: 'Please enter a valid name.',
+  }),
+  menu_id: z.string({
+    invalid_type_error: 'Please enter a valid address.',
+  }),
+  dia_semana: z.string({
+    invalid_type_error: 'Please enter a valid address.',
+  }),
+  fecha_configuracion: z.string(),  
+});
+
+const createMenudia = FormSchemas.omit({ id_configuracion: true });
+const Updatemenudia = FormSchemas.omit({ id_configuracion: true });
+
+
+
+
+
+
+
+
+
+
 
 
   const FormSchem = z.object({
@@ -233,6 +259,23 @@ export async function createProduct(prevState: Stateprod, formData: FormData) {
     message?: string  | null;
   };
 
+  export type Stata = {
+    errors?: {
+      id_configuracion?: string[];  // Cambiar a string[]
+      cliente_id?: string[];        // Cambiar a string[]
+      menu_id?: string[];           // Cambiar a string[]
+      dia_semana?: string[];        // Cambiar a string[]
+      fecha_configuracion?: string[]; // Cambiar a string[]
+    };
+    message?: string | null;
+  };
+  
+  
+
+
+
+
+
  //clientes
  export async function createClientes(prevState: Stat, formData: FormData): Promise<Stat> {
   // Validar formulario usando Zod
@@ -328,14 +371,14 @@ export async function deleteClientes(id: string) {
 
 //menu
 
-export async function createmenudia(prevState: Stat, formData: FormData): Promise<Stat> {
+export async function createmenudia(prevState: Stata, formData: FormData): Promise<Stata> {
   // Validar formulario usando Zod
-  const validatedFields = createCliente.safeParse({
-    id_cliente: formData.get('id_cliente'),
-    nombre_cliente: formData.get('nombre_cliente'),
-    telefono_cliente: formData.get('telefono_cliente'),
-    direccion_cliente: formData.get('direccion_cliente'),
-    fecha_registro: formData.get('fecha_registro'),
+  const validatedFields = createMenudia.safeParse({
+    id_configuracion: formData.get('id_configuracion'),
+    cliente_id: formData.get('cliente_id'),
+    menu_id: formData.get('menu_id'),
+    dia_semana: formData.get('dia_semana'),
+    fecha_configuracion: formData.get('fecha_configuracion'),
   });
 
   if (!validatedFields.success) {
@@ -345,22 +388,22 @@ export async function createmenudia(prevState: Stat, formData: FormData): Promis
     };
   }
 
-  const { nombre_cliente, telefono_cliente, direccion_cliente, fecha_registro } = validatedFields.data;
+  const { cliente_id, menu_id, dia_semana, fecha_configuracion} = validatedFields.data;
 
   try {
     await sql`
-      INSERT INTO clientes (nombre_cliente, telefono_cliente, direccion_cliente, fecha_registro)
-      VALUES (${nombre_cliente}, ${telefono_cliente}, ${direccion_cliente}, ${fecha_registro})
+      INSERT INTO clientes ( cliente_id, menu_id,  dia_semana, fecha_configuracion)
+      VALUES (${cliente_id}, ${ menu_id}, ${dia_semana}, ${fecha_configuracion})
     `;
   } catch (error: any) {  // Usar 'any' para capturar cualquier tipo de error
     const errorMessage = error.message || 'Unknown error occurred during database operation.';
     return {
-      message: `Database Error: ${errorMessage}. Failed to Create Cliente.`,
+      message: `Database Error: ${errorMessage}. Failed to Create menu.`,
     };
   }
 
-  revalidatePath('/dashboard/clientes');
-  redirect('/dashboard/clientes');
+  revalidatePath('/dashboard/menu_del_dia');
+  redirect('/dashboard/menu_del_dia');
 
   return { errors: {}, message: 'Cliente creado con éxito.' };
 }
