@@ -285,7 +285,7 @@ export async function fetchMenusPages(query: string) {
 
 
 // Funciones de facturas y clientes
-export async function fetchRevenue() {
+export async function fetchRevenueFacturas() {
   try {
     console.log('Fetching revenue data...');
     await new Promise((resolve) => setTimeout(resolve, 3000));
