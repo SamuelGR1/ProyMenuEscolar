@@ -281,3 +281,73 @@ export async function fetchMenusPages(query: string) {
   }
 }
 
+
+
+
+// Funciones de facturas y clientes
+export async function fetchRevenue() {
+  try {
+    console.log('Fetching revenue data...');
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    const data = await sql<Revenue>`SELECT * FROM revenue`;
+    console.log('Data fetch completed after 3 seconds.');
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch revenue data.');
+  }
+}
+
+// Nueva función para obtener facturas
+export async function fetchFacturas() {
+  try {
+    const data = await sql<Factura>`SELECT * FROM facturas ORDER BY fecha_factura DESC`;
+    return data.rows.map(factura => ({
+      ...factura,
+      total_factura: formatCurrency(factura.total_factura),
+    }));
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch facturas.');
+  }
+}
+
+// Nueva función para obtener detalles de una factura
+export async function fetchDetallesFactura(facturaId: number) {
+  try {
+    const data = await sql<DetalleFactura>`
+      SELECT * FROM detalles_factura WHERE factura_id = ${facturaId}
+    `;
+    return data.rows.map(detalle => ({
+      ...detalle,
+      costo_total: formatCurrency(detalle.costo_total),
+    }));
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch detalles de factura.');
+  }
+}
+
+// Funciones existentes sin cambios
+export async function fetchLatestInvoices() {
+  try {
+    const data = await sql<LatestInvoiceRaw>`
+      SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
+      FROM invoices
+      JOIN customers ON invoices.customer_id = customers.id
+      ORDER BY invoices.date DESC
+      LIMIT 5`;
+
+    const latestInvoices = data.rows.map((invoice) => ({
+      ...invoice,
+      amount: formatCurrency(invoice.amount),
+    }));
+    return latestInvoices;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch the latest invoices.');
+  }
+}
+

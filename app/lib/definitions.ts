@@ -117,6 +117,34 @@ export type MenuField = {
   fecha_creacion: string; 
 };
 
+// Nuevas definiciones para las facturas y detalles de facturas
 
+export type InvoiceRecord = {
+  id_factura: string; // ID de la factura
+  cliente_id: string; // ID del cliente
+  fecha_factura: string; // Fecha de la factura en formato ISO
+  total_factura: number; // Total de la factura
+};
 
+export type InvoiceDetailRecord = {
+  id_detalle_factura: string; // ID del detalle de la factura
+  factura_id: string; // ID de la factura asociada
+  menu_id: string; // ID del menú asociado
+  costo_total: number; // Costo total del detalle
+};
 
+// Representación de las facturas en la tabla
+export type InvoicesTableRecord = {
+  id_factura: string; // ID de la factura
+  cliente_id: string; // ID del cliente
+  fecha_factura: string; // Fecha de la factura en formato ISO
+  total_factura: number; // Total de la factura
+};
+
+// Representación de los detalles de las facturas en la tabla
+export type InvoiceDetailsTableRecord = {
+  id_detalle_factura: string; // ID del detalle de la factura
+  factura_id: string; // ID de la factura asociada
+  menu_id: string; // ID del menú asociado
+  costo_total: number; // Costo total del detalle
+};
