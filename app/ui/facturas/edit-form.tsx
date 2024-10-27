@@ -1,8 +1,8 @@
 'use client';
 
-import { updateInvoice, State } from '@/app/lib/actionsfactura';
+import { updateInvoice, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
-import { CustomerField, InvoiceForm } from '@/app/lib/definitionsfactura';
+import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
 import {
   CheckIcon,
   ClockIcon,

@@ -52,8 +52,8 @@ export async function createInvoice(prevState: State, formData: FormData) {
 
   try {
     await sql`
-      INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+      INSERT INTO facturas (cliente_id, total_factura, fecha_factura)
+      VALUES (${customerId}, ${amountInCents}, ${date})
     `;
   } catch (error) {
     return { message: 'Database Error: Failed to Create Invoice.' };
@@ -87,9 +87,9 @@ export async function updateInvoice(
 
   try {
     await sql`
-      UPDATE invoices
-      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
-      WHERE id = ${id}
+      UPDATE facturas
+      SET cliente_id = ${customerId}, total_factura = ${amountInCents}
+      WHERE id_factura = ${id}
     `;
   } catch (error) {
     return { message: 'Database Error: Failed to Update Invoice.' };
@@ -102,7 +102,7 @@ export async function updateInvoice(
 // Lógica de eliminación de facturas
 export async function deleteInvoice(id: string) {
   try {
-    await sql`DELETE FROM invoices WHERE id = ${id}`;
+    await sql`DELETE FROM facturas WHERE id_factura = ${id}`;
     revalidatePath('/dashboard/invoices');
     return { message: 'Deleted Invoice.' };
   } catch (error) {
@@ -110,7 +110,97 @@ export async function deleteInvoice(id: string) {
   }
 }
 
-// **NUEVOS DATOS**: Lógica para manejar los menús
+// **NUEVOS DATOS**: Lógica para manejar los detalles de facturas
+const InvoiceDetailSchema = z.object({
+  factura_id: z.string(),
+  menu_id: z.string(),
+  costo_total: z.coerce.number().gt(0, { message: 'El costo debe ser mayor a $0.' }),
+});
+
+const CreateInvoiceDetail = InvoiceDetailSchema.omit({});
+const UpdateInvoiceDetail = InvoiceDetailSchema.omit({});
+
+export type InvoiceDetailState = {
+  errors?: {
+    menu_id?: string[];
+    costo_total?: string[];
+  };
+  message?: string | null;
+};
+
+// Lógica de creación de detalles de facturas
+export async function createInvoiceDetail(prevState: InvoiceDetailState, formData: FormData) {
+  const validatedFields = CreateInvoiceDetail.safeParse({
+    factura_id: formData.get('factura_id'),
+    menu_id: formData.get('menu_id'),
+    costo_total: formData.get('costo_total'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Campos faltantes. Fallo al crear detalle de factura.',
+    };
+  }
+
+  const { factura_id, menu_id, costo_total } = validatedFields.data;
+
+  try {
+    await sql`
+      INSERT INTO detalles_factura (factura_id, menu_id, costo_total)
+      VALUES (${factura_id}, ${menu_id}, ${costo_total})
+    `;
+  } catch (error) {
+    return { message: 'Error en la base de datos: Fallo al crear detalle de factura.' };
+  }
+
+  revalidatePath('/dashboard/invoice-details');
+  redirect('/dashboard/invoice-details');
+}
+
+// Lógica de actualización de detalles de facturas
+export async function updateInvoiceDetail(id: string, prevState: InvoiceDetailState, formData: FormData) {
+  const validatedFields = UpdateInvoiceDetail.safeParse({
+    factura_id: formData.get('factura_id'),
+    menu_id: formData.get('menu_id'),
+    costo_total: formData.get('costo_total'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Campos faltantes. Fallo al actualizar detalle de factura.',
+    };
+  }
+
+  const { factura_id, menu_id, costo_total } = validatedFields.data;
+
+  try {
+    await sql`
+      UPDATE detalles_factura
+      SET factura_id = ${factura_id}, menu_id = ${menu_id}, costo_total = ${costo_total}
+      WHERE id_detalle_factura = ${id}
+    `;
+  } catch (error) {
+    return { message: 'Error en la base de datos: Fallo al actualizar detalle de factura.' };
+  }
+
+  revalidatePath('/dashboard/invoice-details');
+  redirect('/dashboard/invoice-details');
+}
+
+// Lógica de eliminación de detalles de facturas
+export async function deleteInvoiceDetail(id: string) {
+  try {
+    await sql`DELETE FROM detalles_factura WHERE id_detalle_factura = ${id}`;
+    revalidatePath('/dashboard/invoice-details');
+    return { message: 'Detalle de factura eliminado.' };
+  } catch (error) {
+    return { message: 'Error en la base de datos: Fallo al eliminar detalle de factura.' };
+  }
+}
+
+// Lógica de creación de menús
 const MenuSchema = z.object({
   id_menu: z.string(),
   descripcion_menu: z.string().min(1, { message: 'La descripción es requerida.' }),
@@ -312,5 +402,3 @@ export async function authenticate(
     throw error;
   }
 }
-
-  
